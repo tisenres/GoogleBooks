@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    namespace 'com.example.testprojectgooglebooks'
+    namespace 'com.example.googlebooks'
     compileSdk 33
 
     defaultConfig {
-        applicationId "com.example.testprojectgooglebooks"
+        applicationId "com.example.googlebooks"
         minSdk 29
         targetSdk 33
         versionCode 1

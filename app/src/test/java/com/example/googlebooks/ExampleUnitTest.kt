@@ -1,4 +1,4 @@
-package com.example.testprojectgooglebooks
+package com.example.googlebooks
 
 import org.junit.Test
 

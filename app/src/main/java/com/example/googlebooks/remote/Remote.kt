@@ -1,9 +1,7 @@
-package com.example.testprojectgooglebooks.remote
+package com.example.googlebooks.remote
 
-import com.example.testprojectgooglebooks.search.entity.Book
-import io.reactivex.Scheduler
+import com.example.googlebooks.search.entity.Book
 import io.reactivex.Single
-import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory

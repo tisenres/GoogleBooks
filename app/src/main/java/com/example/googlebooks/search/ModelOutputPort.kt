@@ -1,4 +1,4 @@
-package com.example.testprojectgooglebooks.search
+package com.example.googlebooks.search
 
 interface ModelOutputPort {
 	fun onBookReceived()

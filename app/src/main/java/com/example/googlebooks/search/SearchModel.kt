@@ -1,7 +1,7 @@
-package com.example.testprojectgooglebooks.search
+package com.example.googlebooks.search
 
-import com.example.testprojectgooglebooks.remote.Remote
-import com.example.testprojectgooglebooks.search.entity.Book
+import com.example.googlebooks.remote.Remote
+import com.example.googlebooks.search.entity.Book
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 

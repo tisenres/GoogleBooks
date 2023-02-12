@@ -1,6 +1,6 @@
-package com.example.testprojectgooglebooks.search
+package com.example.googlebooks.search
 
-import com.example.testprojectgooglebooks.search.entity.Book
+import com.example.googlebooks.search.entity.Book
 
 class SearchPresenter(private var searchView: ISearchView) : ISearchPresenter, ModelOutputPort {
 

@@ -1,12 +1,12 @@
-package com.example.testprojectgooglebooks.search
+package com.example.googlebooks.search
 
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.Adapter
-import com.example.testprojectgooglebooks.databinding.RecyclerViewItemBinding
-import com.example.testprojectgooglebooks.search.entity.Book
+import com.example.googlebooks.databinding.RecyclerViewItemBinding
+import com.example.googlebooks.search.entity.Book
 
 class BooksAdapter(private val searchPresenter: ISearchPresenter): Adapter<BooksAdapter.BooksViewHolder>() {
 
