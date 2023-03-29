@@ -7,4 +7,5 @@ abstract class AbstractRepository {
 	abstract fun delete(book: Book)
 	abstract fun get(position: Int): Book
 	abstract fun getRepoSize(): Int
+	abstract fun contains(book: Book): Boolean
 }

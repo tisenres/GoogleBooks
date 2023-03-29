@@ -28,6 +28,10 @@ object MemoryRepository: AbstractRepository() {
 		return storage[position]
 	}
 
+	override fun contains(book: Book): Boolean {
+		return storage.contains(book)
+	}
+
 	override fun getRepoSize(): Int {
 		return storage.size
 	}

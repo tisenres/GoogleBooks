@@ -28,22 +28,11 @@ class SearchModel(private var outputPort: ModelOutputPort) : ISearchModel {
 	}
 
 	override fun toggleFavoriteStatus(book: Book) {
-
-		if (book.isFavorite) {
+		if (repo.contains(book)) {
 			repo.delete(book)
 		} else {
 			repo.save(book)
 		}
-		book.isFavorite = !book.isFavorite
-
-//		repo.get(book)?.let {
-//
-//			MemoryRepository.delete(book)
-//
-//		} ?: also {
-//			MemoryRepository.save(book)
-//			book.isFavorite = !book.isFavorite
-//		}
 	}
 
 	override fun getBooksCount(): Int = books.size
