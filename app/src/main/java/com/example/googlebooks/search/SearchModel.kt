@@ -1,6 +1,7 @@
 package com.example.googlebooks.search
 
 import com.example.googlebooks.remote.Remote
+import com.example.googlebooks.repository.MemoryRepository
 import com.example.googlebooks.search.entity.Book
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
@@ -8,6 +9,7 @@ import io.reactivex.disposables.Disposable
 class SearchModel(private var outputPort: ModelOutputPort) : ISearchModel {
 	private var books: MutableList<Book> = mutableListOf()
 	private var disposable: Disposable? = null
+	private val repo = MemoryRepository
 
 	override fun getBooks(query: String) {
 		disposable = Remote.fetchBooks(query = query)
@@ -23,6 +25,25 @@ class SearchModel(private var outputPort: ModelOutputPort) : ISearchModel {
 					   })
 
 
+	}
+
+	override fun toggleFavoriteStatus(book: Book) {
+
+		if (book.isFavorite) {
+			repo.delete(book)
+		} else {
+			repo.save(book)
+		}
+		book.isFavorite = !book.isFavorite
+
+//		repo.get(book)?.let {
+//
+//			MemoryRepository.delete(book)
+//
+//		} ?: also {
+//			MemoryRepository.save(book)
+//			book.isFavorite = !book.isFavorite
+//		}
 	}
 
 	override fun getBooksCount(): Int = books.size

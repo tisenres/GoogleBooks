@@ -1,4 +1,4 @@
-package com.example.googlebooks.search
+package com.example.googlebooks.bookadapter
 
 import android.view.LayoutInflater
 import android.view.View
@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView.Adapter
 import com.example.googlebooks.databinding.RecyclerViewItemBinding
 import com.example.googlebooks.search.entity.Book
 
-class BooksAdapter(private val searchPresenter: ISearchPresenter): Adapter<BooksAdapter.BooksViewHolder>() {
+class SearchBooksAdapter(private val adapterHandler: IAdapterHandler): Adapter<SearchBooksAdapter.BooksViewHolder>() {
 
 	class BooksViewHolder(itemView: View, val binding: RecyclerViewItemBinding) : RecyclerView.ViewHolder(itemView)
 
@@ -18,13 +18,17 @@ class BooksAdapter(private val searchPresenter: ISearchPresenter): Adapter<Books
 	}
 
 	override fun onBindViewHolder(holder: BooksViewHolder, position: Int) {
-		val book: Book = searchPresenter.getBook(position)
+		val book: Book = adapterHandler.getBook(position)
 
 		holder.binding.title.text = book.title
 		holder.binding.description.text = book.description
+
+		holder.binding.favButton.setOnClickListener {
+			adapterHandler.onFavoritesButtonPressed(book)
+		}
 	}
 
 	override fun getItemCount(): Int {
-		return searchPresenter.getBooksCount()
+		return adapterHandler.getBooksCount()
 	}
 }

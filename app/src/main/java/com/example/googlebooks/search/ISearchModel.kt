@@ -6,5 +6,6 @@ interface ISearchModel {
 	fun getBooks(query: String)
 	fun getBooksCount(): Int
 	fun getBook(position: Int): Book
+	fun toggleFavoriteStatus(book: Book)
 
 }

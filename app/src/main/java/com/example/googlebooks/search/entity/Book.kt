@@ -1,6 +1,10 @@
 package com.example.googlebooks.search.entity
 
-data class Book(val title: String,
+import io.realm.RealmObject
+
+data class Book(
+				val id: String,
+				val title: String,
 				val description: String?,
-			   	val isFavorite: Boolean = false
-			   )
+			   	var isFavorite: Boolean = false
+			   ): RealmObject()

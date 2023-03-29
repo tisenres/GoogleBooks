@@ -2,20 +2,23 @@ package com.example.googlebooks.search
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.googlebooks.bookadapter.IAdapterHandler
+import com.example.googlebooks.bookadapter.SearchBooksAdapter
 import com.example.googlebooks.databinding.FragmentSearchBinding
 
 class SearchFragment : Fragment(), ISearchView {
 
 	private lateinit var binding: FragmentSearchBinding
 	private lateinit var searchPresenter: ISearchPresenter
+	private lateinit var adapterHandler: IAdapterHandler
 
 	override fun onCreateView(
 		inflater: LayoutInflater, container: ViewGroup?,
@@ -23,7 +26,10 @@ class SearchFragment : Fragment(), ISearchView {
 
 		binding = FragmentSearchBinding.inflate(layoutInflater)
 
-		searchPresenter = SearchPresenter(this)
+		SearchPresenter(this).let {
+			searchPresenter = it
+			adapterHandler = it
+		}
 
 		setOnClickListeners()
 		initRecyclerView()
@@ -46,7 +52,7 @@ class SearchFragment : Fragment(), ISearchView {
 
 	private fun initRecyclerView() {
 		binding.rvBooks.apply {
-			adapter = BooksAdapter(searchPresenter)
+			adapter = SearchBooksAdapter(adapterHandler)
 			layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
 			addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
 		}

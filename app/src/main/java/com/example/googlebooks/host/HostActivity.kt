@@ -1,10 +1,9 @@
 package com.example.googlebooks.host
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import com.example.googlebooks.R
+import androidx.appcompat.app.AppCompatActivity
 import com.example.googlebooks.databinding.ActivityHostBinding
-import com.example.googlebooks.search.ViewPagerAdapter
+import com.google.android.material.tabs.TabLayoutMediator
 
 class HostActivity : AppCompatActivity(), IHostView {
 
@@ -20,18 +19,17 @@ class HostActivity : AppCompatActivity(), IHostView {
 		hostPresenter = HostPresenter(this)
 
 		initViewPager()
-		initBottomNavigation()
+		initTabNavigation()
 
 	}
 
-	private fun initBottomNavigation() {
-		binding.bottomNavigation.setOnItemSelectedListener {
-			when (it.itemId) {
-				R.id.search -> binding.viewPager.currentItem = 0
-				else -> binding.viewPager.currentItem = 1
+	private fun initTabNavigation() {
+		TabLayoutMediator(binding.tabNavigation, binding.viewPager) { tab, position ->
+			when (position) {
+				0 -> tab.text = "search"
+				1 -> tab.text = "favorites"
 			}
-			true
-		}
+		}.attach()
 	}
 
 	private fun initViewPager() {

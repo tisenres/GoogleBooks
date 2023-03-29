@@ -1,23 +1,58 @@
 package com.example.googlebooks.favourites
 
+import android.annotation.SuppressLint
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.example.googlebooks.R
+import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.example.googlebooks.bookadapter.IAdapterHandler
+import com.example.googlebooks.bookadapter.SearchBooksAdapter
+import com.example.googlebooks.databinding.FragmentFavoritesBinding
 
 class FavoritesFragment : Fragment(), IFavoritesView {
 
+	private lateinit var binding: FragmentFavoritesBinding
+	private lateinit var favoritesPresenter: IFavoritesPresenter
+	private lateinit var adapterHandler: IAdapterHandler
+
+
 	override fun onCreateView(
 		inflater: LayoutInflater, container: ViewGroup?,
-		savedInstanceState: Bundle?
-							 ): View? {
+		savedInstanceState: Bundle?): View {
 
-		return inflater.inflate(R.layout.fragment_favorites, container, false)
+		binding = FragmentFavoritesBinding.inflate(layoutInflater)
+		FavoritesPresenter(this).let {
+			favoritesPresenter = it
+			adapterHandler = it
+		}
+
+		initRecyclerView()
+
+		return binding.root
 	}
 
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 		super.onViewCreated(view, savedInstanceState)
+		favoritesPresenter.onViewCreated()
+	}
+
+	override fun onDestroy() {
+		super.onDestroy()
+		favoritesPresenter.onViewDestroy()
+	}
+
+	private fun initRecyclerView() {
+		binding.rvBooks.apply {
+			adapter = SearchBooksAdapter(adapterHandler)
+			layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
+
+		}
+	}
+	@SuppressLint("NotifyDataSetChanged")
+	override fun reloadBookList() {
+		binding.rvBooks.adapter?.notifyDataSetChanged()
 	}
 }

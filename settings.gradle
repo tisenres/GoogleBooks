@@ -12,5 +12,5 @@ dependencyResolutionManagement {
         mavenCentral()
     }
 }
-rootProject.name = "TestProjectGoogleBooks"
+rootProject.name = "GoogleBooks"
 include ':app'
