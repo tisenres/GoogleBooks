@@ -8,8 +8,8 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.googlebooks.bookadapter.BookListAdapter
 import com.example.googlebooks.bookadapter.IAdapterHandler
-import com.example.googlebooks.bookadapter.SearchBooksAdapter
 import com.example.googlebooks.databinding.FragmentFavoritesBinding
 
 class FavoritesFragment : Fragment(), IFavoritesView {
@@ -22,15 +22,6 @@ class FavoritesFragment : Fragment(), IFavoritesView {
 	override fun onCreateView(
 		inflater: LayoutInflater, container: ViewGroup?,
 		savedInstanceState: Bundle?): View {
-		
-		println("loooooohhhhhhhh");
-		println("loooooohhhhhhhh");
-		println("loooooohhhhhhhh");
-		println("loooooohhhhhhhh");
-		println("loooooohhhhhhhh");
-		println("loooooohhhhhhhh");
-		println("loooooohhhhhhhh");
-		println("loooooohhhhhhhh");
 		
 		binding = FragmentFavoritesBinding.inflate(layoutInflater)
 		FavoritesPresenter(this).let {
@@ -55,7 +46,7 @@ class FavoritesFragment : Fragment(), IFavoritesView {
 
 	private fun initRecyclerView() {
 		binding.rvBooks.apply {
-			adapter = SearchBooksAdapter(adapterHandler)
+			adapter = BookListAdapter(adapterHandler)
 			layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
 
 		}

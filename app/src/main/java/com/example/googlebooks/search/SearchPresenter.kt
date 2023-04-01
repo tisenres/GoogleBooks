@@ -35,9 +35,9 @@ class SearchPresenter(private var searchView: ISearchView) : ISearchPresenter, M
 	}
 
 	override fun onViewCreated() {
-		disposable = searchModel.getRepositoryChangeSubject().subscribe {
-			searchView.reloadBookList()
-		}
+		disposable = searchModel.getRepositoryChangeSubject()
+			.subscribe ({ searchView.reloadBookList() },
+						{it.printStackTrace() })
 	}
 
 	override fun onViewDestroy() {

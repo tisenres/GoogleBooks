@@ -19,11 +19,12 @@ class FavoritesPresenter(private val favoritesView: IFavoritesView) : IFavorites
 		favoritesModel.deleteFavoriteBook(book)
 	}
 
-	override fun isBookFavoriteNow(book: Book): Boolean = true
+	override fun isBookFavoriteNow(book: Book): Boolean = false
 
 	override fun onViewCreated() {
 		disposable = favoritesModel.getRepositoryChangeSubject()
-			.subscribe { favoritesView.reloadBookList() }
+			.subscribe ({ favoritesView.reloadBookList() },
+						{ it.printStackTrace()})
 	}
 
 	override fun onViewDestroy() {

@@ -10,8 +10,8 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.googlebooks.bookadapter.BookListAdapter
 import com.example.googlebooks.bookadapter.IAdapterHandler
-import com.example.googlebooks.bookadapter.SearchBooksAdapter
 import com.example.googlebooks.databinding.FragmentSearchBinding
 
 class SearchFragment : Fragment(), ISearchView {
@@ -54,7 +54,7 @@ class SearchFragment : Fragment(), ISearchView {
 
 	private fun initRecyclerView() {
 		binding.rvBooks.apply {
-			adapter = SearchBooksAdapter(adapterHandler)
+			adapter = BookListAdapter(adapterHandler)
 			layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
 			addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
 		}

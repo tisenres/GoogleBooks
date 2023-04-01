@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView.Adapter
 import com.example.googlebooks.databinding.RecyclerViewItemBinding
 import com.example.googlebooks.search.entity.Book
 
-class SearchBooksAdapter(private val adapterHandler: IAdapterHandler): Adapter<SearchBooksAdapter.BooksViewHolder>() {
+class BookListAdapter(private val adapterHandler: IAdapterHandler): Adapter<BookListAdapter.BooksViewHolder>() {
 
 	class BooksViewHolder(itemView: View, val binding: RecyclerViewItemBinding) : RecyclerView.ViewHolder(itemView)
 
