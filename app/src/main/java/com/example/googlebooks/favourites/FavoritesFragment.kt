@@ -24,6 +24,13 @@ class FavoritesFragment : Fragment(), IFavoritesView {
 		savedInstanceState: Bundle?): View {
 		
 		println("loooooohhhhhhhh");
+		println("loooooohhhhhhhh");
+		println("loooooohhhhhhhh");
+		println("loooooohhhhhhhh");
+		println("loooooohhhhhhhh");
+		println("loooooohhhhhhhh");
+		println("loooooohhhhhhhh");
+		println("loooooohhhhhhhh");
 		
 		binding = FragmentFavoritesBinding.inflate(layoutInflater)
 		FavoritesPresenter(this).let {
