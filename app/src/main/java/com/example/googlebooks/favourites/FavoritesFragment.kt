@@ -22,7 +22,9 @@ class FavoritesFragment : Fragment(), IFavoritesView {
 	override fun onCreateView(
 		inflater: LayoutInflater, container: ViewGroup?,
 		savedInstanceState: Bundle?): View {
-
+		
+		println("loooooohhhhhhhh");
+		
 		binding = FragmentFavoritesBinding.inflate(layoutInflater)
 		FavoritesPresenter(this).let {
 			favoritesPresenter = it
