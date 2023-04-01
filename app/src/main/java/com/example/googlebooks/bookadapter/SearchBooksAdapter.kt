@@ -23,11 +23,15 @@ class SearchBooksAdapter(private val adapterHandler: IAdapterHandler): Adapter<S
 		holder.binding.title.text = book.title
 		holder.binding.description.text = book.description
 
-		holder.binding.favButton.setOnClickListener {
-			adapterHandler.onFavoritesButtonPressed(book)
-		}
-	}
+		holder.binding.favButton.isChecked = adapterHandler.isBookFavoriteNow(book)
 
+		holder.binding.favButton.setOnCheckedChangeListener { buttonView, isChecked ->
+			adapterHandler.onFavoritesButtonPressed(book)
+			holder.binding.favButton.isChecked = isChecked
+		}
+
+
+	}
 	override fun getItemCount(): Int {
 		return adapterHandler.getBooksCount()
 	}

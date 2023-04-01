@@ -31,6 +31,8 @@ class SearchFragment : Fragment(), ISearchView {
 			adapterHandler = it
 		}
 
+		searchPresenter.onViewCreated()
+
 		setOnClickListeners()
 		initRecyclerView()
 

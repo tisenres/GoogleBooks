@@ -5,6 +5,7 @@ import com.example.googlebooks.repository.MemoryRepository
 import com.example.googlebooks.search.entity.Book
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
+import io.reactivex.subjects.BehaviorSubject
 
 class SearchModel(private var outputPort: ModelOutputPort) : ISearchModel {
 	private var books: MutableList<Book> = mutableListOf()
@@ -25,6 +26,14 @@ class SearchModel(private var outputPort: ModelOutputPort) : ISearchModel {
 					   })
 
 
+	}
+
+	override fun isBookFavoriteNow(book: Book): Boolean {
+		return repo.contains(book)
+	}
+
+	override fun getRepositoryChangeSubject(): BehaviorSubject<Boolean> {
+		return repo.behaviorSubject
 	}
 
 	override fun toggleFavoriteStatus(book: Book) {

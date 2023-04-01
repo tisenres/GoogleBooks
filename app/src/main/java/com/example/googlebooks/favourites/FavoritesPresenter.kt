@@ -4,7 +4,7 @@ import com.example.googlebooks.bookadapter.IAdapterHandler
 import com.example.googlebooks.search.entity.Book
 import io.reactivex.disposables.Disposable
 
-class FavoritesPresenter(private val favoritesFragment: IFavoritesView) : IFavoritesPresenter, IAdapterHandler {
+class FavoritesPresenter(private val favoritesView: IFavoritesView) : IFavoritesPresenter, IAdapterHandler {
 
 	private val favoritesModel: IFavoritesModel = FavoritesModel()
 	private var disposable: Disposable? = null
@@ -19,9 +19,11 @@ class FavoritesPresenter(private val favoritesFragment: IFavoritesView) : IFavor
 		favoritesModel.deleteFavoriteBook(book)
 	}
 
+	override fun isBookFavoriteNow(book: Book): Boolean = true
+
 	override fun onViewCreated() {
 		disposable = favoritesModel.getRepositoryChangeSubject()
-			.subscribe { favoritesFragment.reloadBookList() }
+			.subscribe { favoritesView.reloadBookList() }
 	}
 
 	override fun onViewDestroy() {

@@ -10,9 +10,9 @@
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
         android:layout_toStartOf="@id/fav_button"
-        tools:text="BootTitle Long Long Long Long Long Long Long Long Long Long Long Long Long Long Long Long Long Long Long Long Long Long Long Long Long Long"
-
-        />
+        android:maxLines="2"
+        android:ellipsize="end"
+        tools:text="BootTitle Long Long Long Long Long Long Long Long Long Long Long Long Long Long Long Long Long Long Long Long Long Long Long Long Long Long" />
 
     <TextView
         android:id="@+id/description"
@@ -27,12 +27,31 @@
         android:layout_toStartOf="@id/fav_button"
         tools:text="BookDescription Long Long Long Long Long Long Long Long Long Long Long Long Long Long Long Long Long Long Long Long Long Long " />
 
-    <Button
+    <CheckBox
         android:id="@+id/fav_button"
+        android:button="@drawable/baseline_star_outline_50"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/fav_sign"
-        android:backgroundTint="#89D0F1"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="10dp"
+        android:layout_marginTop="10dp"
+        />
+
+<!--    <ImageButton-->
+<!--        android:id="@+id/fav_button"-->
+<!--        android:button="@drawable/baseline_star_outline_50"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_alignParentEnd="true"-->
+<!--        />-->
+
+<!--    <ToggleButton-->
+<!--        android:id="@+id/fav_button"-->
+<!--        android:button="@drawable/baseline_star_outline_50"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_alignParentEnd="true"-->
+<!--        />-->
+
 
 </RelativeLayout>
