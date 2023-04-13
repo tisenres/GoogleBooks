@@ -27,11 +27,13 @@
         android:layout_toStartOf="@id/fav_button"
         tools:text="BookDescription Long Long Long Long Long Long Long Long Long Long Long Long Long Long Long Long Long Long Long Long Long Long " />
 
-    <CheckBox
+    <ImageView
         android:id="@+id/fav_button"
-        android:button="@drawable/baseline_star_outline_50"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:src="@drawable/fav_button_selector"
+        android:clickable="true"
+        android:scaleType="center"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:layout_alignParentEnd="true"
         android:layout_marginEnd="10dp"
         android:layout_marginTop="10dp"

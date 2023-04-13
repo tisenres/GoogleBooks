@@ -5,6 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.Adapter
+import androidx.recyclerview.widget.RecyclerView.NO_POSITION
 import com.example.googlebooks.databinding.RecyclerViewItemBinding
 import com.example.googlebooks.search.entity.Book
 
@@ -14,25 +15,39 @@ class BookListAdapter(private val adapterHandler: IAdapterHandler): Adapter<Book
 
 	override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BooksViewHolder {
 		val binding = RecyclerViewItemBinding.inflate(LayoutInflater.from(parent.context))
-		return BooksViewHolder(binding.root, binding)
+		val viewHolder = BooksViewHolder(binding.root, binding)
+
+		viewHolder.binding.favButton.setOnClickListener {
+			val pos = viewHolder.adapterPosition
+			if (pos != NO_POSITION) {
+				adapterHandler.onFavoritesButtonPressed(getItem(pos))
+			}
+		}
+		return viewHolder
 	}
 
 	override fun onBindViewHolder(holder: BooksViewHolder, position: Int) {
-		val book: Book = adapterHandler.getBook(position)
+		val book: Book = getItem(position)
 
 		holder.binding.title.text = book.title
 		holder.binding.description.text = book.description
 
-		holder.binding.favButton.isChecked = adapterHandler.isBookFavoriteNow(book)
-
-		holder.binding.favButton.setOnCheckedChangeListener { buttonView, isChecked ->
-			adapterHandler.onFavoritesButtonPressed(book)
-			holder.binding.favButton.isChecked = isChecked
+		if (adapterHandler.isBookFavoriteNow(book)) {
+			holder.binding.favButton.setImageState(listOf(android.R.attr.state_checked).toIntArray(),true)
+		} else {
+			holder.binding.favButton.setImageState(emptyArray<Int>().toIntArray(), false)
 		}
-
-
 	}
+
 	override fun getItemCount(): Int {
 		return adapterHandler.getBooksCount()
+	}
+
+	private fun getItem(position: Int): Book {
+		return adapterHandler.getBook(position)
+	}
+
+	fun clearItems() {
+		notifyItemRangeRemoved(0, itemCount)
 	}
 }

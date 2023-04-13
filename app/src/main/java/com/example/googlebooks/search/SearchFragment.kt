@@ -31,12 +31,15 @@ class SearchFragment : Fragment(), ISearchView {
 			adapterHandler = it
 		}
 
-		searchPresenter.onViewCreated()
-
 		setOnClickListeners()
 		initRecyclerView()
 
 		return binding.root
+	}
+
+	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+		super.onViewCreated(view, savedInstanceState)
+		searchPresenter.onViewCreated()
 	}
 
 	override fun showEmptyQueryMess() {
@@ -45,12 +48,24 @@ class SearchFragment : Fragment(), ISearchView {
 
 
 	private fun setOnClickListeners() {
-		binding.searchButton.setOnClickListener {
+		binding.searchView.setOnClickListener {
 			searchPresenter.onSearchButtonPressed(query = getSearchQuery())
 		}
 	}
 
-	private fun getSearchQuery(): String = binding.editText.text.toString()
+	override fun clearBookList() {
+		(binding.rvBooks.adapter as BookListAdapter).clearItems()
+	}
+
+	override fun startProgressBar() {
+		binding.progressBar.visibility = View.VISIBLE
+	}
+
+	override fun stopProgressBar() {
+		binding.progressBar.visibility = View.GONE
+	}
+
+	private fun getSearchQuery(): String = binding.searchView.query.toString()
 
 	private fun initRecyclerView() {
 		binding.rvBooks.apply {

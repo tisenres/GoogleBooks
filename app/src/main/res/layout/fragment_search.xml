@@ -3,33 +3,54 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".host.HostActivity">
 
-    <EditText
-        android:id="@+id/editText"
+<!--    <EditText-->
+<!--        android:id="@+id/editText"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:inputType="textPersonName"-->
+<!--        android:layout_toLeftOf="@id/searchButton"-->
+<!--        android:imeOptions="actionDone"-->
+<!--        tools:text="Fill the content"-->
+<!--        />-->
+
+<!--    <Button-->
+<!--        android:id="@+id/searchButton"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_alignParentRight="true"-->
+<!--        android:layout_gravity="right"-->
+<!--        android:text="Search"-->
+<!--        />-->
+
+    <androidx.appcompat.widget.SearchView
+        android:id="@+id/searchView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType="textPersonName"
-        android:layout_toLeftOf="@id/searchButton"
-        tools:text="Fill the content"
-        />
-
-    <Button
-        android:id="@+id/searchButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_gravity="right"
-        android:text="Search"
-        />
+        android:imeOptions="actionDone"
+        app:queryHint="Enter a book title..."
+        app:iconifiedByDefault="false"
+        app:queryBackground="@android:color/transparent"
+        android:layout_margin="5dp"
+        android:background="@drawable/search_view_gray_border" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvBooks"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/editText"
-        tools:listitem="@layout/recycler_view_item"
-        />
+        android:layout_below="@id/searchView"
+        android:layout_marginTop="0dp"
+        tools:listitem="@layout/recycler_view_item" />
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="gone" />
 
 
 </RelativeLayout>

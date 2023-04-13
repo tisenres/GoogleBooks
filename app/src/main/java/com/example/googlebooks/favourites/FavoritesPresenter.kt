@@ -1,5 +1,6 @@
 package com.example.googlebooks.favourites
 
+import android.util.Log
 import com.example.googlebooks.bookadapter.IAdapterHandler
 import com.example.googlebooks.search.entity.Book
 import io.reactivex.disposables.Disposable
@@ -19,12 +20,12 @@ class FavoritesPresenter(private val favoritesView: IFavoritesView) : IFavorites
 		favoritesModel.deleteFavoriteBook(book)
 	}
 
-	override fun isBookFavoriteNow(book: Book): Boolean = false
+	override fun isBookFavoriteNow(book: Book): Boolean = true
 
 	override fun onViewCreated() {
 		disposable = favoritesModel.getRepositoryChangeSubject()
-			.subscribe ({ favoritesView.reloadBookList() },
-						{ it.printStackTrace()})
+			.subscribe({ favoritesView.reloadBookList() },
+						{ it.message?.let { error -> Log.e("My log", error) } })
 	}
 
 	override fun onViewDestroy() {

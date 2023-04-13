@@ -1,5 +1,6 @@
 package com.example.googlebooks.repository
 
+import android.util.Log
 import com.example.googlebooks.search.entity.Book
 import io.reactivex.subjects.BehaviorSubject
 
@@ -13,18 +14,18 @@ object MemoryRepository: AbstractRepository() {
 		storage.add(book)
 		behaviorSubject.onNext(true)
 
-		println("Saved book: ${book.title} ID: ${book.id}")
+		Log.d("My log","Saved book: ${book.title}")
 	}
 
 	override fun delete(book: Book) {
 		storage.remove(book)
 		behaviorSubject.onNext(true)
 
-		println("Deleted book: ${book.title} ID: ${book.id}")
+		Log.d("My log", "Deleted book: ${book.title}")
 	}
 
 	override fun get(position: Int): Book {
-		println("Get book with position $position")
+		Log.d("My log","Get book with position $position")
 		return storage[position]
 	}
 

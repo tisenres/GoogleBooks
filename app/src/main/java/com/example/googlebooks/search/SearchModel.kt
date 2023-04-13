@@ -3,9 +3,9 @@ package com.example.googlebooks.search
 import com.example.googlebooks.remote.Remote
 import com.example.googlebooks.repository.MemoryRepository
 import com.example.googlebooks.search.entity.Book
+import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
-import io.reactivex.subjects.BehaviorSubject
 
 class SearchModel(private var outputPort: ModelOutputPort) : ISearchModel {
 	private var books: MutableList<Book> = mutableListOf()
@@ -32,8 +32,9 @@ class SearchModel(private var outputPort: ModelOutputPort) : ISearchModel {
 		return repo.contains(book)
 	}
 
-	override fun getRepositoryChangeSubject(): BehaviorSubject<Boolean> {
+	override fun getRepositoryChangeSubject(): Observable<Boolean> {
 		return repo.behaviorSubject
+			.observeOn(AndroidSchedulers.mainThread())
 	}
 
 	override fun toggleFavoriteStatus(book: Book) {
@@ -47,5 +48,9 @@ class SearchModel(private var outputPort: ModelOutputPort) : ISearchModel {
 	override fun getBooksCount(): Int = books.size
 
 	override fun getBook(position: Int) = books[position]
+
+	override fun clearDataSet() {
+		books.clear()
+	}
 
 }

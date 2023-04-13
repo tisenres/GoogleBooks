@@ -2,7 +2,8 @@ package com.example.googlebooks.favourites
 
 import com.example.googlebooks.repository.MemoryRepository
 import com.example.googlebooks.search.entity.Book
-import io.reactivex.subjects.BehaviorSubject
+import io.reactivex.Observable
+import io.reactivex.android.schedulers.AndroidSchedulers
 
 class FavoritesModel : IFavoritesModel {
 
@@ -14,8 +15,9 @@ class FavoritesModel : IFavoritesModel {
 		return repo.get(position)
 	}
 
-	override fun getRepositoryChangeSubject(): BehaviorSubject<Boolean> {
+	override fun getRepositoryChangeSubject(): Observable<Boolean> {
 		return repo.behaviorSubject
+			.observeOn(AndroidSchedulers.mainThread())
 	}
 
 	override fun deleteFavoriteBook(book: Book) {
