@@ -4,13 +4,20 @@
     android:layout_height="wrap_content"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <ImageView
+        android:id="@+id/bookImage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:srcCompat="@tools:sample/avatars" />
+
     <TextView
         android:id="@+id/title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
         android:layout_toStartOf="@id/fav_button"
-        android:maxLines="2"
+        android:layout_toEndOf="@id/bookImage"
+        android:maxLines="1"
         android:ellipsize="end"
         tools:text="BootTitle Long Long Long Long Long Long Long Long Long Long Long Long Long Long Long Long Long Long Long Long Long Long Long Long Long Long" />
 
@@ -23,9 +30,10 @@
         android:layout_marginRight="10dp"
         android:layout_marginBottom="10dp"
         android:ellipsize="end"
-        android:maxLines="2"
+        android:maxLines="5"
         android:layout_toStartOf="@id/fav_button"
-        tools:text="BookDescription Long Long Long Long Long Long Long Long Long Long Long Long Long Long Long Long Long Long Long Long Long Long " />
+        android:layout_toEndOf="@id/bookImage"
+        tools:text="BookDescription Long Long Long Long Long Long Long Long Long Long Long Long Long Long Long Long Long Long Long Long Long Long Long Long Long Long Long Long Long Long Long Long" />
 
     <ImageView
         android:id="@+id/fav_button"
@@ -34,26 +42,10 @@
         android:scaleType="center"
         android:layout_width="50dp"
         android:layout_height="50dp"
+        android:layout_centerVertical="true"
         android:layout_alignParentEnd="true"
         android:layout_marginEnd="10dp"
         android:layout_marginTop="10dp"
         />
-
-<!--    <ImageButton-->
-<!--        android:id="@+id/fav_button"-->
-<!--        android:button="@drawable/baseline_star_outline_50"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_alignParentEnd="true"-->
-<!--        />-->
-
-<!--    <ToggleButton-->
-<!--        android:id="@+id/fav_button"-->
-<!--        android:button="@drawable/baseline_star_outline_50"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_alignParentEnd="true"-->
-<!--        />-->
-
 
 </RelativeLayout>

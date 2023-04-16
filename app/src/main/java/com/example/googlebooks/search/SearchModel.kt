@@ -1,19 +1,24 @@
 package com.example.googlebooks.search
 
+import android.util.Log
 import com.example.googlebooks.remote.Remote
 import com.example.googlebooks.repository.MemoryRepository
 import com.example.googlebooks.search.entity.Book
 import io.reactivex.Observable
+import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
+import java.io.InputStream
+
 
 class SearchModel(private var outputPort: ModelOutputPort) : ISearchModel {
 	private var books: MutableList<Book> = mutableListOf()
-	private var disposable: Disposable? = null
+	private var booksDisposable: Disposable? = null
+
 	private val repo = MemoryRepository
 
 	override fun getBooks(query: String) {
-		disposable = Remote.fetchBooks(query = query)
+		booksDisposable = Remote.fetchBooks(query = query)
 			.observeOn(AndroidSchedulers.mainThread())
 			.subscribe({ newBooks ->
 						   books.clear()
@@ -24,8 +29,6 @@ class SearchModel(private var outputPort: ModelOutputPort) : ISearchModel {
 						   it.printStackTrace()
 						   outputPort.onFetchError(it.message ?: "Error")
 					   })
-
-
 	}
 
 	override fun isBookFavoriteNow(book: Book): Boolean {
@@ -51,6 +54,12 @@ class SearchModel(private var outputPort: ModelOutputPort) : ISearchModel {
 
 	override fun clearDataSet() {
 		books.clear()
+	}
+
+	override fun getImage(url: String): Single<InputStream> {
+		Log.d("My tag", "We're in Model")
+		return Remote.fetchImage(url)
+			.observeOn(AndroidSchedulers.mainThread())
 	}
 
 }

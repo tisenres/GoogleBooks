@@ -3,7 +3,9 @@ package com.example.googlebooks.search
 import android.util.Log
 import com.example.googlebooks.bookadapter.IAdapterHandler
 import com.example.googlebooks.search.entity.Book
+import io.reactivex.Single
 import io.reactivex.disposables.Disposable
+import java.io.InputStream
 
 class SearchPresenter(private var searchView: ISearchView) : ISearchPresenter, ModelOutputPort,
 	IAdapterHandler {
@@ -25,7 +27,12 @@ class SearchPresenter(private var searchView: ISearchView) : ISearchPresenter, M
 		}
 	}
 
-	override fun onFavoritesButtonPressed(book: Book) {
+    override fun getBookImage(url: String): Single<InputStream> {
+		Log.d("My tag", "We're in Presenter")
+		return searchModel.getImage(url)
+	}
+
+    override fun onFavoritesButtonPressed(book: Book) {
 		searchModel.toggleFavoriteStatus(book)
 	}
 

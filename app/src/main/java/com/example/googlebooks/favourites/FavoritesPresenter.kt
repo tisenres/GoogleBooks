@@ -3,7 +3,9 @@ package com.example.googlebooks.favourites
 import android.util.Log
 import com.example.googlebooks.bookadapter.IAdapterHandler
 import com.example.googlebooks.search.entity.Book
+import io.reactivex.Single
 import io.reactivex.disposables.Disposable
+import java.io.InputStream
 
 class FavoritesPresenter(private val favoritesView: IFavoritesView) : IFavoritesPresenter, IAdapterHandler {
 
@@ -21,6 +23,10 @@ class FavoritesPresenter(private val favoritesView: IFavoritesView) : IFavorites
 	}
 
 	override fun isBookFavoriteNow(book: Book): Boolean = true
+
+	override fun getBookImage(url: String): Single<InputStream> {
+		TODO("Not yet implemented")
+	}
 
 	override fun onViewCreated() {
 		disposable = favoritesModel.getRepositoryChangeSubject()

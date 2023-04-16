@@ -1,5 +1,8 @@
 package com.example.googlebooks.bookadapter
 
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,6 +13,8 @@ import com.example.googlebooks.databinding.RecyclerViewItemBinding
 import com.example.googlebooks.search.entity.Book
 
 class BookListAdapter(private val adapterHandler: IAdapterHandler): Adapter<BookListAdapter.BooksViewHolder>() {
+
+	private val images: Map<String, Bitmap> = mutableMapOf()
 
 	class BooksViewHolder(itemView: View, val binding: RecyclerViewItemBinding) : RecyclerView.ViewHolder(itemView)
 
@@ -32,12 +37,36 @@ class BookListAdapter(private val adapterHandler: IAdapterHandler): Adapter<Book
 		holder.binding.title.text = book.title
 		holder.binding.description.text = book.description
 
+		// Если в Map нет Bitmap, то оформляем подписку на Single и достаём дефолтовое значение
+		images.getOrDefault(book.imageLink, getImage(book))
+
 		if (adapterHandler.isBookFavoriteNow(book)) {
 			holder.binding.favButton.setImageState(listOf(android.R.attr.state_checked).toIntArray(),true)
 		} else {
 			holder.binding.favButton.setImageState(emptyArray<Int>().toIntArray(), false)
 		}
 	}
+
+	private fun getImage(book: Book) {
+
+		lateinit var bitmap: Bitmap
+
+		val disposable = book.imageLink?.let { it ->
+			adapterHandler.getBookImage(it)
+				.subscribe(
+					{ inputStream ->
+						Log.d("My tag", "We're in Adapter")
+						bitmap = BitmapFactory.decodeStream(inputStream)
+						BitmapFactory.decodeStream(inputStream)
+					},
+					{ ex ->
+						ex.printStackTrace()
+					}
+				)
+		}
+
+	}
+
 
 	override fun getItemCount(): Int {
 		return adapterHandler.getBooksCount()
@@ -48,6 +77,7 @@ class BookListAdapter(private val adapterHandler: IAdapterHandler): Adapter<Book
 	}
 
 	fun clearItems() {
+		// TODO CLEAR IMAGES
 		notifyItemRangeRemoved(0, itemCount)
 	}
 }
