@@ -2,7 +2,6 @@ package com.example.googlebooks.bookadapter
 
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,16 +10,35 @@ import androidx.recyclerview.widget.RecyclerView.Adapter
 import androidx.recyclerview.widget.RecyclerView.NO_POSITION
 import com.example.googlebooks.databinding.RecyclerViewItemBinding
 import com.example.googlebooks.search.entity.Book
+import io.reactivex.disposables.Disposable
 
 class BookListAdapter(private val adapterHandler: IAdapterHandler): Adapter<BookListAdapter.BooksViewHolder>() {
 
 	private val images: Map<String, Bitmap> = mutableMapOf()
 
-	class BooksViewHolder(itemView: View, val binding: RecyclerViewItemBinding) : RecyclerView.ViewHolder(itemView)
+	class BooksViewHolder(itemView: View, val binding: RecyclerViewItemBinding, private val adapterHandler: IAdapterHandler) : RecyclerView.ViewHolder(itemView) {
+		private var disposable: Disposable? = null
+		private var bitmap: Bitmap? = null
+
+		fun getImage(book: Book): Pair<Disposable?, Bitmap?> {
+			disposable = book.imageLink?.let {
+				adapterHandler.getBookImage(it)
+					.subscribe(
+						{ response ->
+							bitmap = BitmapFactory.decodeStream(response.byteStream())
+						},
+						{ ex ->
+							ex.printStackTrace()
+						}
+					)
+			}
+			return Pair(disposable, bitmap)
+		}
+	}
 
 	override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BooksViewHolder {
 		val binding = RecyclerViewItemBinding.inflate(LayoutInflater.from(parent.context))
-		val viewHolder = BooksViewHolder(binding.root, binding)
+		val viewHolder = BooksViewHolder(binding.root, binding, adapterHandler)
 
 		viewHolder.binding.favButton.setOnClickListener {
 			val pos = viewHolder.adapterPosition
@@ -37,34 +55,13 @@ class BookListAdapter(private val adapterHandler: IAdapterHandler): Adapter<Book
 		holder.binding.title.text = book.title
 		holder.binding.description.text = book.description
 
-		// Если в Map нет Bitmap, то оформляем подписку на Single и достаём дефолтовое значение
-		images.getOrDefault(book.imageLink, getImage(book))
+		holder.binding.bookImage.setImageBitmap(holder.getImage(book).second)
 
 		if (adapterHandler.isBookFavoriteNow(book)) {
 			holder.binding.favButton.setImageState(listOf(android.R.attr.state_checked).toIntArray(),true)
 		} else {
 			holder.binding.favButton.setImageState(emptyArray<Int>().toIntArray(), false)
 		}
-	}
-
-	private fun getImage(book: Book) {
-
-		lateinit var bitmap: Bitmap
-
-		val disposable = book.imageLink?.let { it ->
-			adapterHandler.getBookImage(it)
-				.subscribe(
-					{ inputStream ->
-						Log.d("My tag", "We're in Adapter")
-						bitmap = BitmapFactory.decodeStream(inputStream)
-						BitmapFactory.decodeStream(inputStream)
-					},
-					{ ex ->
-						ex.printStackTrace()
-					}
-				)
-		}
-
 	}
 
 

@@ -1,6 +1,6 @@
 package com.example.googlebooks.search
 
-import android.util.Log
+import android.graphics.Bitmap
 import com.example.googlebooks.remote.Remote
 import com.example.googlebooks.repository.MemoryRepository
 import com.example.googlebooks.search.entity.Book
@@ -8,7 +8,7 @@ import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
-import java.io.InputStream
+import okhttp3.ResponseBody
 
 
 class SearchModel(private var outputPort: ModelOutputPort) : ISearchModel {
@@ -56,8 +56,7 @@ class SearchModel(private var outputPort: ModelOutputPort) : ISearchModel {
 		books.clear()
 	}
 
-	override fun getImage(url: String): Single<InputStream> {
-		Log.d("My tag", "We're in Model")
+	override fun getImage(url: String): Single<ResponseBody> {
 		return Remote.fetchImage(url)
 			.observeOn(AndroidSchedulers.mainThread())
 	}

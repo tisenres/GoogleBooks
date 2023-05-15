@@ -5,7 +5,7 @@ import com.example.googlebooks.bookadapter.IAdapterHandler
 import com.example.googlebooks.search.entity.Book
 import io.reactivex.Single
 import io.reactivex.disposables.Disposable
-import java.io.InputStream
+import okhttp3.ResponseBody
 
 class SearchPresenter(private var searchView: ISearchView) : ISearchPresenter, ModelOutputPort,
 	IAdapterHandler {
@@ -27,8 +27,7 @@ class SearchPresenter(private var searchView: ISearchView) : ISearchPresenter, M
 		}
 	}
 
-    override fun getBookImage(url: String): Single<InputStream> {
-		Log.d("My tag", "We're in Presenter")
+    override fun getBookImage(url: String): Single<ResponseBody> {
 		return searchModel.getImage(url)
 	}
 

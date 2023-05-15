@@ -6,25 +6,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".host.HostActivity">
 
-<!--    <EditText-->
-<!--        android:id="@+id/editText"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:inputType="textPersonName"-->
-<!--        android:layout_toLeftOf="@id/searchButton"-->
-<!--        android:imeOptions="actionDone"-->
-<!--        tools:text="Fill the content"-->
-<!--        />-->
-
-<!--    <Button-->
-<!--        android:id="@+id/searchButton"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_alignParentRight="true"-->
-<!--        android:layout_gravity="right"-->
-<!--        android:text="Search"-->
-<!--        />-->
-
     <androidx.appcompat.widget.SearchView
         android:id="@+id/searchView"
         android:layout_width="match_parent"

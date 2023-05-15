@@ -5,7 +5,7 @@ import com.example.googlebooks.bookadapter.IAdapterHandler
 import com.example.googlebooks.search.entity.Book
 import io.reactivex.Single
 import io.reactivex.disposables.Disposable
-import java.io.InputStream
+import okhttp3.ResponseBody
 
 class FavoritesPresenter(private val favoritesView: IFavoritesView) : IFavoritesPresenter, IAdapterHandler {
 
@@ -24,7 +24,7 @@ class FavoritesPresenter(private val favoritesView: IFavoritesView) : IFavorites
 
 	override fun isBookFavoriteNow(book: Book): Boolean = true
 
-	override fun getBookImage(url: String): Single<InputStream> {
+	override fun getBookImage(url: String): Single<ResponseBody> {
 		TODO("Not yet implemented")
 	}
 
