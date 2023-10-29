@@ -1,4 +1,4 @@
-package com.example.googlebooks.favourites
+package com.example.googlebooks.favorites
 
 import com.example.googlebooks.search.entity.Book
 import io.reactivex.Observable

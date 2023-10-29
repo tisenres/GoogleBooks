@@ -1,4 +1,4 @@
-package com.example.googlebooks.repository
+package com.example.googlebooks.data.repository
 
 import com.example.googlebooks.search.entity.Book
 import io.reactivex.subjects.BehaviorSubject

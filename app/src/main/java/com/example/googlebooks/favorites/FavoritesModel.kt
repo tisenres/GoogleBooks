@@ -1,6 +1,6 @@
-package com.example.googlebooks.favourites
+package com.example.googlebooks.favorites
 
-import com.example.googlebooks.repository.MemoryRepository
+import com.example.googlebooks.data.repository.MemoryRepository
 import com.example.googlebooks.search.entity.Book
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers

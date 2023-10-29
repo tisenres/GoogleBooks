@@ -1,11 +1,10 @@
-package com.example.googlebooks.favourites
+package com.example.googlebooks.favorites
 
+import android.graphics.Bitmap
 import android.util.Log
 import com.example.googlebooks.bookadapter.IAdapterHandler
 import com.example.googlebooks.search.entity.Book
-import io.reactivex.Single
 import io.reactivex.disposables.Disposable
-import okhttp3.ResponseBody
 
 class FavoritesPresenter(private val favoritesView: IFavoritesView) : IFavoritesPresenter, IAdapterHandler {
 
@@ -24,7 +23,7 @@ class FavoritesPresenter(private val favoritesView: IFavoritesView) : IFavorites
 
 	override fun isBookFavoriteNow(book: Book): Boolean = true
 
-	override fun getBookImage(url: String): Single<ResponseBody> {
+	override fun getBookImage(url: String): Bitmap? {
 		TODO("Not yet implemented")
 	}
 

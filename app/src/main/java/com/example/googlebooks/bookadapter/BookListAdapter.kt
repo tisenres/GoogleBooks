@@ -1,38 +1,22 @@
 package com.example.googlebooks.bookadapter
 
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.Adapter
 import androidx.recyclerview.widget.RecyclerView.NO_POSITION
+import com.example.googlebooks.bookadapter.IAdapterHandler
 import com.example.googlebooks.databinding.RecyclerViewItemBinding
 import com.example.googlebooks.search.entity.Book
-import io.reactivex.disposables.Disposable
 
 class BookListAdapter(private val adapterHandler: IAdapterHandler): Adapter<BookListAdapter.BooksViewHolder>() {
 
-	private val images: Map<String, Bitmap> = mutableMapOf()
-
 	class BooksViewHolder(itemView: View, val binding: RecyclerViewItemBinding, private val adapterHandler: IAdapterHandler) : RecyclerView.ViewHolder(itemView) {
-		private var disposable: Disposable? = null
-		private var bitmap: Bitmap? = null
 
-		fun getImage(book: Book): Pair<Disposable?, Bitmap?> {
-			disposable = book.imageLink?.let {
-				adapterHandler.getBookImage(it)
-					.subscribe(
-						{ response ->
-							bitmap = BitmapFactory.decodeStream(response.byteStream())
-						},
-						{ ex ->
-							ex.printStackTrace()
-						}
-					)
-			}
-			return Pair(disposable, bitmap)
+		fun getImage(imageLink: String): Bitmap? {
+			return adapterHandler.getBookImage(imageLink)
 		}
 	}
 
@@ -55,7 +39,10 @@ class BookListAdapter(private val adapterHandler: IAdapterHandler): Adapter<Book
 		holder.binding.title.text = book.title
 		holder.binding.description.text = book.description
 
-		holder.binding.bookImage.setImageBitmap(holder.getImage(book).second)
+		val bitmap = book.imageLink?.let { url ->
+			holder.getImage(url)
+		}
+		holder.binding.bookImage.setImageBitmap(bitmap)
 
 		if (adapterHandler.isBookFavoriteNow(book)) {
 			holder.binding.favButton.setImageState(listOf(android.R.attr.state_checked).toIntArray(),true)

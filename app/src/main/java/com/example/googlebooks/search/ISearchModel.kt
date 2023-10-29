@@ -1,5 +1,6 @@
 package com.example.googlebooks.search
 
+import android.graphics.Bitmap
 import com.example.googlebooks.search.entity.Book
 import io.reactivex.Observable
 import io.reactivex.Single
@@ -14,6 +15,7 @@ interface ISearchModel {
 	fun isBookFavoriteNow(book: Book): Boolean
 	fun getRepositoryChangeSubject(): Observable<Boolean>
 	fun clearDataSet()
-	fun getImage(url: String): Single<ResponseBody>
+	fun downloadImage(url: String): Bitmap?
+	fun getImage(url: String): Bitmap?
 
 }

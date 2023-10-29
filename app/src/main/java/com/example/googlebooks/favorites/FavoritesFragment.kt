@@ -1,4 +1,4 @@
-package com.example.googlebooks.favourites
+package com.example.googlebooks.favorites
 
 import android.annotation.SuppressLint
 import android.os.Bundle

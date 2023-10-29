@@ -1,4 +1,4 @@
-package com.example.googlebooks.remote
+package com.example.googlebooks.data.remote
 
 import com.example.googlebooks.search.entity.Book
 import io.reactivex.Single

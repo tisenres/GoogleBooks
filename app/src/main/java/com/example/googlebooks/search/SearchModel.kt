@@ -1,21 +1,22 @@
 package com.example.googlebooks.search
 
 import android.graphics.Bitmap
-import com.example.googlebooks.remote.Remote
-import com.example.googlebooks.repository.MemoryRepository
+import android.graphics.BitmapFactory
+import android.util.Log
+import com.example.googlebooks.data.remote.Remote
+import com.example.googlebooks.data.repository.MemoryRepository
 import com.example.googlebooks.search.entity.Book
 import io.reactivex.Observable
-import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
-import okhttp3.ResponseBody
 
 
 class SearchModel(private var outputPort: ModelOutputPort) : ISearchModel {
 	private var books: MutableList<Book> = mutableListOf()
 	private var booksDisposable: Disposable? = null
-
 	private val repo = MemoryRepository
+	private val images: MutableMap<String, Pair<Bitmap?, Disposable?>> = mutableMapOf()
+
 
 	override fun getBooks(query: String) {
 		booksDisposable = Remote.fetchBooks(query = query)
@@ -56,9 +57,25 @@ class SearchModel(private var outputPort: ModelOutputPort) : ISearchModel {
 		books.clear()
 	}
 
-	override fun getImage(url: String): Single<ResponseBody> {
-		return Remote.fetchImage(url)
+	override fun getImage(url: String): Bitmap? {
+		return images[url]?.first ?: downloadImage(url)
+	}
+
+	override fun downloadImage(url: String): Bitmap? {
+		var bitmap: Bitmap? = null
+		val disposable = Remote.fetchImage(url)
 			.observeOn(AndroidSchedulers.mainThread())
+			.subscribe(
+				{ response ->
+					bitmap = BitmapFactory.decodeStream(response.byteStream())
+				},
+				{ ex ->
+					ex.printStackTrace()
+				}
+			)
+		images[url] = Pair(bitmap, disposable)
+
+		return bitmap
 	}
 
 }

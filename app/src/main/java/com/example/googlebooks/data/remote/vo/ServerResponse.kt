@@ -1,4 +1,4 @@
-package com.example.googlebooks.remote.vo
+package com.example.googlebooks.data.remote.vo
 
 import com.example.googlebooks.search.entity.Book
 
