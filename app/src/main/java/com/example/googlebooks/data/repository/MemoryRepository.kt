@@ -6,7 +6,6 @@ import io.reactivex.subjects.BehaviorSubject
 object MemoryRepository: AbstractRepository() {
 
 	val behaviorSubject = BehaviorSubject.create<Boolean>()
-
 	private val storage: MutableList<Book> = mutableListOf()
 
 	override fun save(book: Book) {

@@ -28,7 +28,6 @@ class SearchPresenter(private var searchView: ISearchView) : ISearchPresenter, M
 
     override fun getBookImage(url: String): Bitmap? {
         val bitmap = searchModel.getImage(url)
-        Log.d("Nastya", bitmap.toString())
         return bitmap
     }
 
@@ -62,8 +61,6 @@ class SearchPresenter(private var searchView: ISearchView) : ISearchPresenter, M
     override fun onFetchError(message: String) {
         searchView.showErrorMess(message)
     }
-
-
 }
 
 
