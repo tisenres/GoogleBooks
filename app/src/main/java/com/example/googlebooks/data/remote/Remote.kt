@@ -19,14 +19,14 @@ object Remote: IRemote {
 		.build()
 		.create(GoogleBooksAPI::class.java)
 
-	override fun fetchBooks(query: String): Single<List<Book>> {
-		return api.fetchBooks(query)
-			.subscribeOn(Schedulers.io())
-			.map { it.convertToList() }
+	override suspend fun fetchBooks(query: String): List<Book> {
+		return api.fetchBooks(query).convertToList()
+//		return api.fetchBooks(query)
+//			.subscribeOn(Schedulers.io())
+//			.map { it.convertToList() }
 	}
 
-    override fun fetchImage(url: String): Single<ResponseBody> {
+    override suspend fun fetchImage(url: String): ResponseBody {
 		return api.fetchImage(url)
-			.subscribeOn(Schedulers.io())
 	}
 }

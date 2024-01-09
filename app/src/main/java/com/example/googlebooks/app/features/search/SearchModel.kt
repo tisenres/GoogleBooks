@@ -1,44 +1,62 @@
 package com.example.googlebooks.app.features.search
 
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.util.Log
 import com.example.googlebooks.data.remote.Remote
 import com.example.googlebooks.data.repository.MemoryRepository
 import com.example.googlebooks.app.features.search.entity.Book
-import io.reactivex.Observable
-import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
+import kotlinx.coroutines.CoroutineExceptionHandler
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 
 class SearchModel(private var outputPort: ModelOutputPort) : ISearchModel {
 	private var books: MutableList<Book> = mutableListOf()
-	private var booksDisposable: Disposable? = null
+//	private var booksDisposable: Disposable? = null
 	private val repo = MemoryRepository
 	private val images: MutableMap<String, Pair<Bitmap?, Disposable?>> = mutableMapOf()
-
+	private val modelScope = CoroutineScope(Dispatchers.IO)
 
 	override fun getBooks(query: String) {
-		booksDisposable = Remote.fetchBooks(query = query)
-			.observeOn(AndroidSchedulers.mainThread())
-			.subscribe({ newBooks ->
-						   books.clear()
-						   books.addAll(newBooks)
-						   outputPort.onBookReceived()
-					   },
-					   {
-						   it.printStackTrace()
-						   outputPort.onFetchError(it.message ?: "Error")
-					   })
+
+		val handler = CoroutineExceptionHandler { _, exception ->
+			exception.printStackTrace()
+			outputPort.onFetchError(exception.message ?: "Error")
+		}
+
+		modelScope.launch(handler) {
+			books.clear()
+			val newBooks = Remote.fetchBooks(query = query)
+			withContext(Dispatchers.Main) {
+				books.addAll(newBooks)
+				outputPort.onBookReceived()
+			}
+		}
+
+//		booksDisposable = Remote.fetchBooks(query = query)
+//			.observeOn(AndroidSchedulers.mainThread())
+//			.subscribe({ newBooks ->
+//						   books.clear()
+//						   books.addAll(newBooks)
+//						   outputPort.onBookReceived()
+//					   },
+//					   {
+//						   it.printStackTrace()
+//						   outputPort.onFetchError(it.message ?: "Error")
+//					   })
 	}
 
 	override fun isBookFavoriteNow(book: Book): Boolean {
 		return repo.contains(book)
 	}
 
-	override fun getRepositoryChangeSubject(): Observable<Boolean> {
-		return repo.behaviorSubject
-			.observeOn(AndroidSchedulers.mainThread())
+	override fun getRepositoryChangeFlow(): SharedFlow<Boolean> {
+		return repo.repoChangedFlow
+//		return repo.behaviorSubject
+//			.observeOn(AndroidSchedulers.mainThread())
 	}
 
 	override fun toggleFavoriteStatus(book: Book) {
@@ -63,17 +81,17 @@ class SearchModel(private var outputPort: ModelOutputPort) : ISearchModel {
 
 	override fun downloadImage(url: String): Bitmap? {
 		var bitmap: Bitmap? = null
-		val disposable = Remote.fetchImage(url)
-			.observeOn(AndroidSchedulers.mainThread())
-			.subscribe(
-				{ response ->
-					bitmap = BitmapFactory.decodeStream(response.byteStream())
-				},
-				{ ex ->
-					ex.printStackTrace()
-				}
-			)
-		images[url] = Pair(bitmap, disposable)
+//		val disposable = Remote.fetchImage(url)
+//			.observeOn(AndroidSchedulers.mainThread())
+//			.subscribe(
+//				{ response ->
+//					bitmap = BitmapFactory.decodeStream(response.byteStream())
+//				},
+//				{ ex ->
+//					ex.printStackTrace()
+//				}
+//			)
+//		images[url] = Pair(bitmap, disposable)
 
 		return bitmap
 	}

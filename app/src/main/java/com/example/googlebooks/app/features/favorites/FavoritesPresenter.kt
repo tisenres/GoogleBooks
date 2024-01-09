@@ -1,19 +1,20 @@
 package com.example.googlebooks.app.features.favorites
 
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.util.Log
-import androidx.core.graphics.createBitmap
-import com.example.googlebooks.R
 import com.example.googlebooks.app.features.bookadapter.IAdapterHandler
 import com.example.googlebooks.app.features.search.entity.Book
 import io.reactivex.disposables.Disposable
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 
 class FavoritesPresenter(private val favoritesView: IFavoritesView) : IFavoritesPresenter,
 	IAdapterHandler {
 
 	private val favoritesModel: IFavoritesModel = FavoritesModel()
 	private var disposable: Disposable? = null
+	private val presenterScope = CoroutineScope(Dispatchers.Main)
 
 	override fun getBooksCount(): Int = favoritesModel.getBooksCount()
 
@@ -28,9 +29,17 @@ class FavoritesPresenter(private val favoritesView: IFavoritesView) : IFavorites
 	override fun isBookFavoriteNow(book: Book): Boolean = true
 
 	override fun onViewCreated() {
-		disposable = favoritesModel.getRepositoryChangeSubject()
-			.subscribe({ favoritesView.reloadBookList() },
-						{ it.message?.let { error -> Log.e("My log", error) } })
+
+		presenterScope.launch {
+			favoritesModel.getRepositoryChangeFlow()
+				.collect {
+					Log.d("ChangedFLOWLOW", "Repo changed")
+					favoritesView.reloadBookList()
+				}
+		}
+//		disposable = favoritesModel.getRepositoryChangeFlow()
+//			.subscribe({ favoritesView.reloadBookList() },
+//						{ it.message?.let { error -> Log.e("My log", error) } })
 	}
 
 	override fun onViewDestroy() {

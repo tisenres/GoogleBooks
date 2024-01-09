@@ -5,12 +5,16 @@ import android.util.Log
 import com.example.googlebooks.app.features.bookadapter.IAdapterHandler
 import com.example.googlebooks.app.features.search.entity.Book
 import io.reactivex.disposables.Disposable
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class SearchPresenter(private var searchView: ISearchView) : ISearchPresenter, ModelOutputPort,
     IAdapterHandler {
 
     private val searchModel: ISearchModel = SearchModel(this)
     private var disposable: Disposable? = null
+    private val presenterScope = CoroutineScope(Dispatchers.Main)
 
     override fun onSearchButtonPressed(query: String) {
 
@@ -49,9 +53,18 @@ class SearchPresenter(private var searchView: ISearchView) : ISearchPresenter, M
     }
 
     override fun onViewCreated() {
-        disposable = searchModel.getRepositoryChangeSubject()
-            .subscribe({ searchView.reloadBookList() },
-                { it.message?.let { error -> Log.e("My log", error) } })
+
+        presenterScope.launch {
+            searchModel.getRepositoryChangeFlow()
+                .collect {
+                    Log.d("ChangedFLOWLOW", "Repo changed")
+                    searchView.reloadBookList()
+                }
+        }
+
+//        disposable = searchModel.getRepositoryChangeSubject()
+//            .subscribe({ searchView.reloadBookList() },
+//                { it.message?.let { error -> Log.e("My log", error) } })
     }
 
     override fun onViewDestroy() {
