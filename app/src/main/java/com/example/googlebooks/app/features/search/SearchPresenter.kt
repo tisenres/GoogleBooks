@@ -57,14 +57,9 @@ class SearchPresenter(private var searchView: ISearchView) : ISearchPresenter, M
         presenterScope.launch {
             searchModel.getRepositoryChangeFlow()
                 .collect {
-                    Log.d("ChangedFLOWLOW", "Repo changed")
                     searchView.reloadBookList()
                 }
         }
-
-//        disposable = searchModel.getRepositoryChangeSubject()
-//            .subscribe({ searchView.reloadBookList() },
-//                { it.message?.let { error -> Log.e("My log", error) } })
     }
 
     override fun onViewDestroy() {

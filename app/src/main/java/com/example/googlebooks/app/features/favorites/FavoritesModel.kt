@@ -17,8 +17,6 @@ class FavoritesModel : IFavoritesModel {
 
 	override fun getRepositoryChangeFlow(): SharedFlow<Boolean> {
 		return repo.repoChangedFlow
-//		return repo.behaviorSubject
-//			.observeOn(AndroidSchedulers.mainThread())
 	}
 
 	override fun deleteFavoriteBook(book: Book) {

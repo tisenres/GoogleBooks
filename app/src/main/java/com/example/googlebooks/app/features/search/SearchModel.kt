@@ -15,7 +15,6 @@ import kotlinx.coroutines.withContext
 
 class SearchModel(private var outputPort: ModelOutputPort) : ISearchModel {
 	private var books: MutableList<Book> = mutableListOf()
-//	private var booksDisposable: Disposable? = null
 	private val repo = MemoryRepository
 	private val images: MutableMap<String, Pair<Bitmap?, Disposable?>> = mutableMapOf()
 	private val modelScope = CoroutineScope(Dispatchers.IO)
@@ -35,18 +34,6 @@ class SearchModel(private var outputPort: ModelOutputPort) : ISearchModel {
 				outputPort.onBookReceived()
 			}
 		}
-
-//		booksDisposable = Remote.fetchBooks(query = query)
-//			.observeOn(AndroidSchedulers.mainThread())
-//			.subscribe({ newBooks ->
-//						   books.clear()
-//						   books.addAll(newBooks)
-//						   outputPort.onBookReceived()
-//					   },
-//					   {
-//						   it.printStackTrace()
-//						   outputPort.onFetchError(it.message ?: "Error")
-//					   })
 	}
 
 	override fun isBookFavoriteNow(book: Book): Boolean {
@@ -55,8 +42,6 @@ class SearchModel(private var outputPort: ModelOutputPort) : ISearchModel {
 
 	override fun getRepositoryChangeFlow(): SharedFlow<Boolean> {
 		return repo.repoChangedFlow
-//		return repo.behaviorSubject
-//			.observeOn(AndroidSchedulers.mainThread())
 	}
 
 	override fun toggleFavoriteStatus(book: Book) {
