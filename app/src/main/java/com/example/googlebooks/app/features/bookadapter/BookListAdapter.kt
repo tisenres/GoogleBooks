@@ -1,4 +1,4 @@
-package com.example.googlebooks.bookadapter
+package com.example.googlebooks.app.features.bookadapter
 
 import android.graphics.Bitmap
 import android.view.LayoutInflater
@@ -7,17 +7,17 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.Adapter
 import androidx.recyclerview.widget.RecyclerView.NO_POSITION
-import com.example.googlebooks.bookadapter.IAdapterHandler
+import com.example.googlebooks.app.features.bookadapter.IAdapterHandler
 import com.example.googlebooks.databinding.RecyclerViewItemBinding
-import com.example.googlebooks.search.entity.Book
+import com.example.googlebooks.app.features.search.entity.Book
 
 class BookListAdapter(private val adapterHandler: IAdapterHandler): Adapter<BookListAdapter.BooksViewHolder>() {
 
 	class BooksViewHolder(itemView: View, val binding: RecyclerViewItemBinding, private val adapterHandler: IAdapterHandler) : RecyclerView.ViewHolder(itemView) {
 
-		fun getImage(imageLink: String): Bitmap? {
-			return adapterHandler.getBookImage(imageLink)
-		}
+//		fun getImage(imageLink: String): Bitmap? {
+//			return adapterHandler.getBookImage(imageLink)
+//		}
 	}
 
 	override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BooksViewHolder {
@@ -39,10 +39,10 @@ class BookListAdapter(private val adapterHandler: IAdapterHandler): Adapter<Book
 		holder.binding.title.text = book.title
 		holder.binding.description.text = book.description
 
-		val bitmap = book.imageLink?.let { url ->
-			holder.getImage(url)
-		}
-		holder.binding.bookImage.setImageBitmap(bitmap)
+//		val bitmap = book.imageLink?.let { url ->
+//			holder.getImage(url)
+//		}
+//		holder.binding.bookImage.setImageBitmap(bitmap)
 
 		if (adapterHandler.isBookFavoriteNow(book)) {
 			holder.binding.favButton.setImageState(listOf(android.R.attr.state_checked).toIntArray(),true)
@@ -61,7 +61,6 @@ class BookListAdapter(private val adapterHandler: IAdapterHandler): Adapter<Book
 	}
 
 	fun clearItems() {
-		// TODO CLEAR IMAGES
 		notifyItemRangeRemoved(0, itemCount)
 	}
 }

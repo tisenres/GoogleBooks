@@ -1,12 +1,16 @@
-package com.example.googlebooks.favorites
+package com.example.googlebooks.app.features.favorites
 
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.util.Log
-import com.example.googlebooks.bookadapter.IAdapterHandler
-import com.example.googlebooks.search.entity.Book
+import androidx.core.graphics.createBitmap
+import com.example.googlebooks.R
+import com.example.googlebooks.app.features.bookadapter.IAdapterHandler
+import com.example.googlebooks.app.features.search.entity.Book
 import io.reactivex.disposables.Disposable
 
-class FavoritesPresenter(private val favoritesView: IFavoritesView) : IFavoritesPresenter, IAdapterHandler {
+class FavoritesPresenter(private val favoritesView: IFavoritesView) : IFavoritesPresenter,
+	IAdapterHandler {
 
 	private val favoritesModel: IFavoritesModel = FavoritesModel()
 	private var disposable: Disposable? = null
@@ -22,10 +26,6 @@ class FavoritesPresenter(private val favoritesView: IFavoritesView) : IFavorites
 	}
 
 	override fun isBookFavoriteNow(book: Book): Boolean = true
-
-	override fun getBookImage(url: String): Bitmap? {
-		TODO("Not yet implemented")
-	}
 
 	override fun onViewCreated() {
 		disposable = favoritesModel.getRepositoryChangeSubject()

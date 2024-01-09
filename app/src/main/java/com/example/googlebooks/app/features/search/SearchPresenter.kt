@@ -1,9 +1,9 @@
-package com.example.googlebooks.search
+package com.example.googlebooks.app.features.search
 
 import android.graphics.Bitmap
 import android.util.Log
-import com.example.googlebooks.bookadapter.IAdapterHandler
-import com.example.googlebooks.search.entity.Book
+import com.example.googlebooks.app.features.bookadapter.IAdapterHandler
+import com.example.googlebooks.app.features.search.entity.Book
 import io.reactivex.disposables.Disposable
 
 class SearchPresenter(private var searchView: ISearchView) : ISearchPresenter, ModelOutputPort,

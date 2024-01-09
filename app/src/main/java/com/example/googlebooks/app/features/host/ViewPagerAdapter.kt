@@ -1,11 +1,11 @@
-package com.example.googlebooks.host
+package com.example.googlebooks.app.features.host
 
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import com.example.googlebooks.favorites.FavoritesFragment
-import com.example.googlebooks.search.SearchFragment
+import com.example.googlebooks.app.features.favorites.FavoritesFragment
+import com.example.googlebooks.app.features.search.SearchFragment
 
 class ViewPagerAdapter(fragmentManager: FragmentManager, lifecycle: Lifecycle) : FragmentStateAdapter(fragmentManager, lifecycle) {
 

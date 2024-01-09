@@ -1,6 +1,6 @@
 package com.example.googlebooks.data.repository
 
-import com.example.googlebooks.search.entity.Book
+import com.example.googlebooks.app.features.search.entity.Book
 
 abstract class AbstractRepository {
 	abstract fun save(book: Book)

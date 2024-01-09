@@ -1,7 +1,6 @@
-package com.example.googlebooks.favorites
+package com.example.googlebooks.app.features.favorites
 
 interface IFavoritesPresenter {
 	fun onViewCreated()
 	fun onViewDestroy()
-
 }

@@ -1,4 +1,4 @@
-package com.example.googlebooks.search
+package com.example.googlebooks.app.features.search
 
 import android.annotation.SuppressLint
 import android.os.Bundle
@@ -10,8 +10,8 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.googlebooks.bookadapter.BookListAdapter
-import com.example.googlebooks.bookadapter.IAdapterHandler
+import com.example.googlebooks.app.features.bookadapter.BookListAdapter
+import com.example.googlebooks.app.features.bookadapter.IAdapterHandler
 import com.example.googlebooks.databinding.FragmentSearchBinding
 
 class SearchFragment : Fragment(), ISearchView {

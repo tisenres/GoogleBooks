@@ -1,4 +1,4 @@
-package com.example.googlebooks.search
+package com.example.googlebooks.app.features.search
 
 interface ISearchView {
 	fun reloadBookList()

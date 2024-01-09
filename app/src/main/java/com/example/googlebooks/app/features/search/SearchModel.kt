@@ -1,11 +1,11 @@
-package com.example.googlebooks.search
+package com.example.googlebooks.app.features.search
 
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.util.Log
 import com.example.googlebooks.data.remote.Remote
 import com.example.googlebooks.data.repository.MemoryRepository
-import com.example.googlebooks.search.entity.Book
+import com.example.googlebooks.app.features.search.entity.Book
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable

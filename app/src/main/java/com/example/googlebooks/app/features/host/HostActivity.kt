@@ -1,4 +1,4 @@
-package com.example.googlebooks.host
+package com.example.googlebooks.app.features.host
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity

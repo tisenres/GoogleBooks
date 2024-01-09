@@ -1,6 +1,6 @@
-package com.example.googlebooks.favorites
+package com.example.googlebooks.app.features.favorites
 
-import com.example.googlebooks.search.entity.Book
+import com.example.googlebooks.app.features.search.entity.Book
 import io.reactivex.Observable
 
 interface IFavoritesModel {

@@ -1,4 +1,4 @@
-package com.example.googlebooks.search.entity
+package com.example.googlebooks.app.features.search.entity
 
 data class Book(
 				val title: String,

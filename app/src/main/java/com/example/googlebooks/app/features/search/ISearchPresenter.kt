@@ -1,7 +1,7 @@
-package com.example.googlebooks.search
+package com.example.googlebooks.app.features.search
 
 import android.graphics.Bitmap
-import com.example.googlebooks.search.entity.Book
+import com.example.googlebooks.app.features.search.entity.Book
 import io.reactivex.Single
 import okhttp3.ResponseBody
 
