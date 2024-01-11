@@ -19,15 +19,12 @@ class SearchPresenter(private var searchView: ISearchView) : ISearchPresenter, M
     private val presenterScope = CoroutineScope(Dispatchers.Main + handler)
 
     override fun onSearchButtonPressed(query: String) {
-        searchModel.clearDataSet()
-        searchView.clearBookList()
 
         if (query.isNotBlank()) {
-            searchView.startProgressBar()
+            searchModel.clearDataSet()
             searchModel.fetchBooks(query = query)
         } else {
             searchView.showEmptyQueryMess()
-            searchView.stopProgressBar()
         }
     }
 
@@ -49,16 +46,28 @@ class SearchPresenter(private var searchView: ISearchView) : ISearchPresenter, M
     }
 
     override fun onViewCreated() {
+
         presenterScope.launch {
             searchModel.getRepositoryChangeFlow()
                 .collect {
                     searchView.reloadBookList()
                 }
         }
+
         presenterScope.launch {
             searchModel.getUpdateBooksFlow()
                 .collect {
                     searchView.reloadBookList()
+                }
+        }
+
+        presenterScope.launch {
+            searchModel.getProgressBarStatus()
+                .collect { state ->
+                    when (state) {
+                        ProgressBarStatus.WORK -> searchView.startProgressBar()
+                        ProgressBarStatus.IDLE -> searchView.stopProgressBar()
+                    }
                 }
         }
     }

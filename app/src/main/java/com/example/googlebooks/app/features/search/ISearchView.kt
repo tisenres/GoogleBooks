@@ -6,5 +6,4 @@ interface ISearchView {
 	fun showEmptyQueryMess()
 	fun startProgressBar()
 	fun stopProgressBar()
-    fun clearBookList()
 }

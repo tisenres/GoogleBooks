@@ -8,8 +8,11 @@ import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 class SearchModel: ISearchModel {
@@ -17,6 +20,7 @@ class SearchModel: ISearchModel {
 	private var books: MutableList<Book> = mutableListOf()
 	private val repo = MemoryRepository
 	private val _updateBooksFlow = MutableSharedFlow<Boolean>()
+	private val _progressBarState = MutableStateFlow(ProgressBarStatus.IDLE)
 	private val handler = CoroutineExceptionHandler { _, exception ->
 		exception.printStackTrace()
 	}
@@ -24,11 +28,13 @@ class SearchModel: ISearchModel {
 
 	override fun fetchBooks(query: String) {
 		modelScope.launch {
+			_progressBarState.emit(ProgressBarStatus.WORK)
 			books.clear()
 			val newBooks = Remote.fetchBooks(query = query)
 			books.addAll(newBooks)
-			fetchImageForEachBook()
 			_updateBooksFlow.emit(true)
+			_progressBarState.emit(ProgressBarStatus.IDLE)
+			fetchImageForEachBook()
 		}
 	}
 
@@ -38,6 +44,10 @@ class SearchModel: ISearchModel {
 
 	override fun getRepositoryChangeFlow(): SharedFlow<Boolean> {
 		return repo.repoChangedFlow
+	}
+
+	override fun getProgressBarStatus(): StateFlow<ProgressBarStatus> {
+		return _progressBarState.asStateFlow()
 	}
 
 	override fun getUpdateBooksFlow(): SharedFlow<Boolean> {
@@ -58,6 +68,7 @@ class SearchModel: ISearchModel {
 
 	override fun clearDataSet() {
 		books.clear()
+		_updateBooksFlow.tryEmit(true)
 	}
 
 	override suspend fun fetchImageForEachBook() {

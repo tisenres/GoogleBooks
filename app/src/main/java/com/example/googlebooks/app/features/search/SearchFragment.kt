@@ -51,10 +51,6 @@ class SearchFragment : Fragment(), ISearchView {
 		Toast.makeText(this.context, "Enter the search query", Toast.LENGTH_LONG).show()
 	}
 
-	override fun clearBookList() {
-		(binding.rvBooks.adapter as BookListAdapter).clearItems()
-	}
-
 	override fun startProgressBar() {
 		binding.progressBar.visibility = View.VISIBLE
 	}
