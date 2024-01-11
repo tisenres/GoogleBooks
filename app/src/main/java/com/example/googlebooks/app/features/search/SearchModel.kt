@@ -12,16 +12,15 @@ import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
 
-class SearchModel(private var outputPort: ModelOutputPort) : ISearchModel {
+class SearchModel: ISearchModel {
 
 	private var books: MutableList<Book> = mutableListOf()
 	private val repo = MemoryRepository
+	private val _updateBooksFlow = MutableSharedFlow<Boolean>()
 	private val handler = CoroutineExceptionHandler { _, exception ->
 		exception.printStackTrace()
-		outputPort.onFetchError(exception.message ?: "Error")
 	}
 	private val modelScope = CoroutineScope(handler + Dispatchers.IO)
-	private val _bookPositionFlow = MutableSharedFlow<Boolean>()
 
 	override fun fetchBooks(query: String) {
 		modelScope.launch {
@@ -29,7 +28,7 @@ class SearchModel(private var outputPort: ModelOutputPort) : ISearchModel {
 			val newBooks = Remote.fetchBooks(query = query)
 			books.addAll(newBooks)
 			fetchImageForEachBook()
-			_bookPositionFlow.emit(true)
+			_updateBooksFlow.emit(true)
 		}
 	}
 
@@ -41,8 +40,8 @@ class SearchModel(private var outputPort: ModelOutputPort) : ISearchModel {
 		return repo.repoChangedFlow
 	}
 
-	override fun getBooksChangedFlow(): SharedFlow<Boolean> {
-		return _bookPositionFlow.asSharedFlow()
+	override fun getUpdateBooksFlow(): SharedFlow<Boolean> {
+		return _updateBooksFlow.asSharedFlow()
 	}
 
 	override fun toggleFavoriteStatus(book: Book) {
@@ -63,12 +62,12 @@ class SearchModel(private var outputPort: ModelOutputPort) : ISearchModel {
 
 	override suspend fun fetchImageForEachBook() {
 		modelScope.launch {
-			books.forEach { book ->
+			books.map { book ->
 				book.imageLink?.let { url ->
 					val response = Remote.fetchImage(url)
 					val bitmap = BitmapFactory.decodeStream(response.byteStream())
 					book.imageBitmap = bitmap
-					_bookPositionFlow.emit(true)
+					_updateBooksFlow.emit(true)
 				}
 			}
 		}

@@ -3,6 +3,7 @@ package com.example.googlebooks.app.features.search
 import com.example.googlebooks.app.features.bookadapter.IAdapterHandler
 import com.example.googlebooks.app.features.search.entity.Book
 import io.reactivex.disposables.Disposable
+import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -10,17 +11,20 @@ import kotlinx.coroutines.launch
 class SearchPresenter(private var searchView: ISearchView) : ISearchPresenter, ModelOutputPort,
     IAdapterHandler {
 
-    private val searchModel: ISearchModel = SearchModel(this)
+    private val searchModel: ISearchModel = SearchModel()
     private var disposable: Disposable? = null
-    private val presenterScope = CoroutineScope(Dispatchers.Main)
+    private val handler = CoroutineExceptionHandler { _, exception ->
+		exception.printStackTrace()
+	}
+    private val presenterScope = CoroutineScope(Dispatchers.Main + handler)
 
     override fun onSearchButtonPressed(query: String) {
         searchModel.clearDataSet()
         searchView.clearBookList()
 
         if (query.isNotBlank()) {
-            searchModel.fetchBooks(query = query)
             searchView.startProgressBar()
+            searchModel.fetchBooks(query = query)
         } else {
             searchView.showEmptyQueryMess()
             searchView.stopProgressBar()
@@ -50,15 +54,13 @@ class SearchPresenter(private var searchView: ISearchView) : ISearchPresenter, M
                 .collect {
                     searchView.reloadBookList()
                 }
-
         }
-
         presenterScope.launch {
-            searchModel.getBooksChangedFlow()
+            searchModel.getUpdateBooksFlow()
                 .collect {
                     searchView.reloadBookList()
                 }
-            }
+        }
     }
 
     override fun onViewDestroy() {

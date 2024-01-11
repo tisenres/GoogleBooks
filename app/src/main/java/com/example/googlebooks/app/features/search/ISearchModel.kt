@@ -1,6 +1,7 @@
 package com.example.googlebooks.app.features.search
 
 import com.example.googlebooks.app.features.search.entity.Book
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharedFlow
 
 interface ISearchModel {
@@ -12,5 +13,5 @@ interface ISearchModel {
 	fun getRepositoryChangeFlow(): SharedFlow<Boolean>
 	fun clearDataSet()
 	suspend fun fetchImageForEachBook()
-	fun getBooksChangedFlow(): SharedFlow<Boolean>
+	fun getUpdateBooksFlow(): SharedFlow<Boolean>
 }
