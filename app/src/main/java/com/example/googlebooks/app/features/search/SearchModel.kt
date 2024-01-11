@@ -1,30 +1,32 @@
 package com.example.googlebooks.app.features.search
 
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import com.example.googlebooks.data.remote.Remote
 import com.example.googlebooks.data.repository.MemoryRepository
 import com.example.googlebooks.app.features.search.entity.Book
-import io.reactivex.disposables.Disposable
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 
 class SearchModel(private var outputPort: ModelOutputPort) : ISearchModel {
+
 	private var books: MutableList<Book> = mutableListOf()
 	private val repo = MemoryRepository
-	private val images: MutableMap<String, Pair<Bitmap?, Disposable?>> = mutableMapOf()
+	private val images: MutableMap<String, Bitmap?> = mutableMapOf()
 	private val modelScope = CoroutineScope(Dispatchers.IO)
+	private val handler = CoroutineExceptionHandler { _, exception ->
+		exception.printStackTrace()
+		outputPort.onFetchError(exception.message ?: "Error")
+	}
 
 	override fun getBooks(query: String) {
-		val handler = CoroutineExceptionHandler { _, exception ->
-			exception.printStackTrace()
-			outputPort.onFetchError(exception.message ?: "Error")
-		}
-
 		modelScope.launch(handler) {
 			books.clear()
 			val newBooks = Remote.fetchBooks(query = query)
@@ -60,24 +62,21 @@ class SearchModel(private var outputPort: ModelOutputPort) : ISearchModel {
 	}
 
 	override fun getImage(url: String): Bitmap? {
-		return images[url]?.first ?: downloadImage(url)
-	}
-
-	override fun downloadImage(url: String): Bitmap? {
 		var bitmap: Bitmap? = null
-//		val disposable = Remote.fetchImage(url)
-//			.observeOn(AndroidSchedulers.mainThread())
-//			.subscribe(
-//				{ response ->
-//					bitmap = BitmapFactory.decodeStream(response.byteStream())
-//				},
-//				{ ex ->
-//					ex.printStackTrace()
-//				}
-//			)
-//		images[url] = Pair(bitmap, disposable)
 
+		images[url] ?: run {
+			modelScope.launch(handler + Dispatchers.Main) {
+				bitmap = downloadImage(url).await()
+				images[url] = bitmap
+			}
+		}
 		return bitmap
 	}
 
+	override suspend fun downloadImage(url: String): Deferred<Bitmap?> {
+		return modelScope.async (handler) {
+			val response = Remote.fetchImage(url)
+			BitmapFactory.decodeStream(response.byteStream())
+		}
+	}
 }

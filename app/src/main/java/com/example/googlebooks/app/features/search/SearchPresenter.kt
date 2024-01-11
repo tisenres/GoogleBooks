@@ -29,8 +29,7 @@ class SearchPresenter(private var searchView: ISearchView) : ISearchPresenter, M
     }
 
     override fun getBookImage(url: String): Bitmap? {
-        val bitmap = searchModel.getImage(url)
-        return bitmap
+        return searchModel.getImage(url)
     }
 
     override fun onFavoritesButtonPressed(book: Book) {

@@ -3,7 +3,6 @@ package com.example.googlebooks.data.remote
 import com.example.googlebooks.app.features.search.entity.Book
 import okhttp3.ResponseBody
 import retrofit2.Retrofit
-import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 
 object Remote: IRemote {
@@ -13,7 +12,6 @@ object Remote: IRemote {
 	private val api: GoogleBooksAPI = Retrofit.Builder()
 		.baseUrl(BASE_HOST)
 		.addConverterFactory(GsonConverterFactory.create())
-		.addCallAdapterFactory(RxJava2CallAdapterFactory.create())
 		.build()
 		.create(GoogleBooksAPI::class.java)
 

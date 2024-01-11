@@ -1,6 +1,6 @@
 package com.example.googlebooks.app.features.favorites
 
-import android.util.Log
+import android.graphics.Bitmap
 import com.example.googlebooks.app.features.bookadapter.IAdapterHandler
 import com.example.googlebooks.app.features.search.entity.Book
 import io.reactivex.disposables.Disposable
@@ -27,17 +27,17 @@ class FavoritesPresenter(private val favoritesView: IFavoritesView) : IFavorites
 
 	override fun isBookFavoriteNow(book: Book): Boolean = true
 
+	override fun getBookImage(url: String): Bitmap? {
+		return null
+	}
+
 	override fun onViewCreated() {
 		presenterScope.launch {
 			favoritesModel.getRepositoryChangeFlow()
 				.collect {
-					Log.d("ChangedFLOWLOW", "Repo changed")
 					favoritesView.reloadBookList()
 				}
 		}
-//		disposable = favoritesModel.getRepositoryChangeFlow()
-//			.subscribe({ favoritesView.reloadBookList() },
-//						{ it.message?.let { error -> Log.e("My log", error) } })
 	}
 
 	override fun onViewDestroy() {
