@@ -3,7 +3,6 @@ package com.example.googlebooks.app.features.favorites
 import com.example.googlebooks.data.repository.MemoryRepository
 import com.example.googlebooks.app.features.search.entity.Book
 import kotlinx.coroutines.flow.SharedFlow
-import kotlinx.coroutines.flow.StateFlow
 
 class FavoritesModel : IFavoritesModel {
 
@@ -22,7 +21,5 @@ class FavoritesModel : IFavoritesModel {
 	override fun deleteFavoriteBook(book: Book) {
 		repo.delete(book)
 	}
-
-
 }
 

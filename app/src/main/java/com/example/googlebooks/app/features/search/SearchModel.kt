@@ -20,7 +20,6 @@ class SearchModel(private var outputPort: ModelOutputPort) : ISearchModel {
 	private val modelScope = CoroutineScope(Dispatchers.IO)
 
 	override fun getBooks(query: String) {
-
 		val handler = CoroutineExceptionHandler { _, exception ->
 			exception.printStackTrace()
 			outputPort.onFetchError(exception.message ?: "Error")

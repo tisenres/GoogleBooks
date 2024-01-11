@@ -1,7 +1,6 @@
 package com.example.googlebooks.app.features.search
 
 import android.graphics.Bitmap
-import android.util.Log
 import com.example.googlebooks.app.features.bookadapter.IAdapterHandler
 import com.example.googlebooks.app.features.search.entity.Book
 import io.reactivex.disposables.Disposable
@@ -17,7 +16,6 @@ class SearchPresenter(private var searchView: ISearchView) : ISearchPresenter, M
     private val presenterScope = CoroutineScope(Dispatchers.Main)
 
     override fun onSearchButtonPressed(query: String) {
-
         searchModel.clearDataSet()
         searchView.clearBookList()
 
@@ -53,7 +51,6 @@ class SearchPresenter(private var searchView: ISearchView) : ISearchPresenter, M
     }
 
     override fun onViewCreated() {
-
         presenterScope.launch {
             searchModel.getRepositoryChangeFlow()
                 .collect {
@@ -67,8 +64,6 @@ class SearchPresenter(private var searchView: ISearchView) : ISearchPresenter, M
     }
 
     override fun onFetchError(message: String) {
-        searchView.showErrorMess(message)
+        searchView.showErrorMessage(message)
     }
 }
-
-

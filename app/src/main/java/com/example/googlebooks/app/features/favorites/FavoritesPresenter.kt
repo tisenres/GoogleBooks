@@ -6,7 +6,6 @@ import com.example.googlebooks.app.features.search.entity.Book
 import io.reactivex.disposables.Disposable
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 class FavoritesPresenter(private val favoritesView: IFavoritesView) : IFavoritesPresenter,
@@ -29,7 +28,6 @@ class FavoritesPresenter(private val favoritesView: IFavoritesView) : IFavorites
 	override fun isBookFavoriteNow(book: Book): Boolean = true
 
 	override fun onViewCreated() {
-
 		presenterScope.launch {
 			favoritesModel.getRepositoryChangeFlow()
 				.collect {

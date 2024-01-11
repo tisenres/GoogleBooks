@@ -1,21 +1,17 @@
 package com.example.googlebooks.data.repository
 
 import com.example.googlebooks.app.features.search.entity.Book
-import io.reactivex.subjects.BehaviorSubject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 object MemoryRepository: AbstractRepository() {
 
-//	val behaviorSubject = BehaviorSubject.create<Boolean>()
-
 	private val _repoChangedFlow = MutableSharedFlow<Boolean>()
 	val repoChangedFlow = _repoChangedFlow.asSharedFlow()
+
 	private val storage: MutableList<Book> = mutableListOf()
 	private val repoScope = CoroutineScope(Dispatchers.IO)
 
@@ -25,7 +21,6 @@ object MemoryRepository: AbstractRepository() {
 		repoScope.launch {
 			_repoChangedFlow.emit(true)
 		}
-//		behaviorSubject.onNext(true)
 	}
 
 	override fun delete(book: Book) {
@@ -33,7 +28,6 @@ object MemoryRepository: AbstractRepository() {
 		repoScope.launch {
 			_repoChangedFlow.emit(true)
 		}
-//		behaviorSubject.onNext(true)
 	}
 
 	override fun get(position: Int): Book {

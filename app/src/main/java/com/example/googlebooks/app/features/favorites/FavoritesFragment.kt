@@ -52,6 +52,7 @@ class FavoritesFragment : Fragment(), IFavoritesView {
 			addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
 		}
 	}
+
 	@SuppressLint("NotifyDataSetChanged")
 	override fun reloadBookList() {
 		binding.rvBooks.adapter?.notifyDataSetChanged()

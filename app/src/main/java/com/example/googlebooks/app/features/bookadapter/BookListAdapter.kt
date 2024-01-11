@@ -1,13 +1,11 @@
 package com.example.googlebooks.app.features.bookadapter
 
-import android.graphics.Bitmap
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.Adapter
 import androidx.recyclerview.widget.RecyclerView.NO_POSITION
-import com.example.googlebooks.app.features.bookadapter.IAdapterHandler
 import com.example.googlebooks.databinding.RecyclerViewItemBinding
 import com.example.googlebooks.app.features.search.entity.Book
 
@@ -50,7 +48,6 @@ class BookListAdapter(private val adapterHandler: IAdapterHandler): Adapter<Book
 			holder.binding.favButton.setImageState(emptyArray<Int>().toIntArray(), false)
 		}
 	}
-
 
 	override fun getItemCount(): Int {
 		return adapterHandler.getBooksCount()

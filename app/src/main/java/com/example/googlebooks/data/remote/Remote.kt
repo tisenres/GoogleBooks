@@ -1,8 +1,6 @@
 package com.example.googlebooks.data.remote
 
 import com.example.googlebooks.app.features.search.entity.Book
-import io.reactivex.Single
-import io.reactivex.schedulers.Schedulers
 import okhttp3.ResponseBody
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
@@ -21,9 +19,6 @@ object Remote: IRemote {
 
 	override suspend fun fetchBooks(query: String): List<Book> {
 		return api.fetchBooks(query).convertToList()
-//		return api.fetchBooks(query)
-//			.subscribeOn(Schedulers.io())
-//			.map { it.convertToList() }
 	}
 
     override suspend fun fetchImage(url: String): ResponseBody {
