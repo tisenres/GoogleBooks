@@ -1,6 +1,5 @@
 package com.example.googlebooks.app.features.search
 
-import android.graphics.Bitmap
 import com.example.googlebooks.app.features.bookadapter.IAdapterHandler
 import com.example.googlebooks.app.features.search.entity.Book
 import io.reactivex.disposables.Disposable
@@ -20,16 +19,12 @@ class SearchPresenter(private var searchView: ISearchView) : ISearchPresenter, M
         searchView.clearBookList()
 
         if (query.isNotBlank()) {
-            searchModel.getBooks(query = query)
+            searchModel.fetchBooks(query = query)
             searchView.startProgressBar()
         } else {
             searchView.showEmptyQueryMess()
             searchView.stopProgressBar()
         }
-    }
-
-    override fun getBookImage(url: String): Bitmap? {
-        return searchModel.getImage(url)
     }
 
     override fun onFavoritesButtonPressed(book: Book) {
@@ -44,7 +39,7 @@ class SearchPresenter(private var searchView: ISearchView) : ISearchPresenter, M
 
     override fun getBooksCount(): Int = searchModel.getBooksCount()
 
-    override fun onBookReceived() {
+    override fun onBooksReceived() {
         searchView.reloadBookList()
         searchView.stopProgressBar()
     }
@@ -55,7 +50,15 @@ class SearchPresenter(private var searchView: ISearchView) : ISearchPresenter, M
                 .collect {
                     searchView.reloadBookList()
                 }
+
         }
+
+        presenterScope.launch {
+            searchModel.getBooksChangedFlow()
+                .collect {
+                    searchView.reloadBookList()
+                }
+            }
     }
 
     override fun onViewDestroy() {
@@ -64,5 +67,9 @@ class SearchPresenter(private var searchView: ISearchView) : ISearchPresenter, M
 
     override fun onFetchError(message: String) {
         searchView.showErrorMessage(message)
+    }
+
+    override fun onImageReceived() {
+        searchView.reloadBookList()
     }
 }

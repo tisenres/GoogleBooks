@@ -1,39 +1,35 @@
 package com.example.googlebooks.app.features.search
 
-import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import com.example.googlebooks.data.remote.Remote
 import com.example.googlebooks.data.repository.MemoryRepository
 import com.example.googlebooks.app.features.search.entity.Book
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-
 
 class SearchModel(private var outputPort: ModelOutputPort) : ISearchModel {
 
 	private var books: MutableList<Book> = mutableListOf()
 	private val repo = MemoryRepository
-	private val images: MutableMap<String, Bitmap?> = mutableMapOf()
-	private val modelScope = CoroutineScope(Dispatchers.IO)
 	private val handler = CoroutineExceptionHandler { _, exception ->
 		exception.printStackTrace()
 		outputPort.onFetchError(exception.message ?: "Error")
 	}
+	private val modelScope = CoroutineScope(handler + Dispatchers.IO)
+	private val _bookPositionFlow = MutableSharedFlow<Boolean>()
 
-	override fun getBooks(query: String) {
-		modelScope.launch(handler) {
+	override fun fetchBooks(query: String) {
+		modelScope.launch {
 			books.clear()
 			val newBooks = Remote.fetchBooks(query = query)
-			withContext(Dispatchers.Main) {
-				books.addAll(newBooks)
-				outputPort.onBookReceived()
-			}
+			books.addAll(newBooks)
+			fetchImageForEachBook()
+			_bookPositionFlow.emit(true)
 		}
 	}
 
@@ -43,6 +39,10 @@ class SearchModel(private var outputPort: ModelOutputPort) : ISearchModel {
 
 	override fun getRepositoryChangeFlow(): SharedFlow<Boolean> {
 		return repo.repoChangedFlow
+	}
+
+	override fun getBooksChangedFlow(): SharedFlow<Boolean> {
+		return _bookPositionFlow.asSharedFlow()
 	}
 
 	override fun toggleFavoriteStatus(book: Book) {
@@ -61,22 +61,16 @@ class SearchModel(private var outputPort: ModelOutputPort) : ISearchModel {
 		books.clear()
 	}
 
-	override fun getImage(url: String): Bitmap? {
-		var bitmap: Bitmap? = null
-
-		images[url] ?: run {
-			modelScope.launch(handler + Dispatchers.Main) {
-				bitmap = downloadImage(url).await()
-				images[url] = bitmap
+	override suspend fun fetchImageForEachBook() {
+		modelScope.launch {
+			books.forEach { book ->
+				book.imageLink?.let { url ->
+					val response = Remote.fetchImage(url)
+					val bitmap = BitmapFactory.decodeStream(response.byteStream())
+					book.imageBitmap = bitmap
+					_bookPositionFlow.emit(true)
+				}
 			}
-		}
-		return bitmap
-	}
-
-	override suspend fun downloadImage(url: String): Deferred<Bitmap?> {
-		return modelScope.async (handler) {
-			val response = Remote.fetchImage(url)
-			BitmapFactory.decodeStream(response.byteStream())
 		}
 	}
 }

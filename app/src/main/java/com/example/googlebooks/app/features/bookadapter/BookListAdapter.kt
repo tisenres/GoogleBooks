@@ -1,6 +1,5 @@
 package com.example.googlebooks.app.features.bookadapter
 
-import android.graphics.Bitmap
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,12 +11,7 @@ import com.example.googlebooks.app.features.search.entity.Book
 
 class BookListAdapter(private val adapterHandler: IAdapterHandler): Adapter<BookListAdapter.BooksViewHolder>() {
 
-	class BooksViewHolder(itemView: View, val binding: RecyclerViewItemBinding, private val adapterHandler: IAdapterHandler) : RecyclerView.ViewHolder(itemView) {
-
-		fun getImage(imageLink: String): Bitmap? {
-			return adapterHandler.getBookImage(imageLink)
-		}
-	}
+	class BooksViewHolder(itemView: View, val binding: RecyclerViewItemBinding, private val adapterHandler: IAdapterHandler) : RecyclerView.ViewHolder(itemView)
 
 	override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BooksViewHolder {
 		val binding = RecyclerViewItemBinding.inflate(LayoutInflater.from(parent.context))
@@ -37,11 +31,7 @@ class BookListAdapter(private val adapterHandler: IAdapterHandler): Adapter<Book
 
 		holder.binding.title.text = book.title
 		holder.binding.description.text = book.description
-
-		val bitmap = book.imageLink?.let { url ->
-			holder.getImage(url)
-		}
-		holder.binding.bookImage.setImageBitmap(bitmap)
+		holder.binding.bookImage.setImageBitmap(book.imageBitmap)
 
 		if (adapterHandler.isBookFavoriteNow(book)) {
 			holder.binding.favButton.setImageState(listOf(android.R.attr.state_checked).toIntArray(),true)

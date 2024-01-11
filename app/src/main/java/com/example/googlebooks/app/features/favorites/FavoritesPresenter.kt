@@ -27,10 +27,6 @@ class FavoritesPresenter(private val favoritesView: IFavoritesView) : IFavorites
 
 	override fun isBookFavoriteNow(book: Book): Boolean = true
 
-	override fun getBookImage(url: String): Bitmap? {
-		return null
-	}
-
 	override fun onViewCreated() {
 		presenterScope.launch {
 			favoritesModel.getRepositoryChangeFlow()

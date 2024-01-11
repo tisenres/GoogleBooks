@@ -8,5 +8,4 @@ interface IAdapterHandler {
     fun getBook(position: Int): Book
     fun onFavoritesButtonPressed(book: Book)
     fun isBookFavoriteNow(book: Book): Boolean
-    fun getBookImage(url: String): Bitmap?
 }

@@ -8,5 +8,4 @@ interface IFavoritesModel {
 	fun getBook(position: Int): Book
 	fun getRepositoryChangeFlow(): SharedFlow<Boolean>
 	fun deleteFavoriteBook(book: Book)
-
 }
