@@ -72,9 +72,9 @@ class SearchModel: ISearchModel {
 	}
 
 	override suspend fun fetchImageForEachBook() {
-		modelScope.launch {
-			books.map { book ->
-				book.imageLink?.let { url ->
+		books.map { book ->
+			book.imageLink?.let { url ->
+				modelScope.launch {
 					val response = Remote.fetchImage(url)
 					val bitmap = BitmapFactory.decodeStream(response.byteStream())
 					book.imageBitmap = bitmap

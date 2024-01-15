@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="book_preview">book preview</string>
+    <string name="enter_book_title">Enter a book title</string>
+</resources>
