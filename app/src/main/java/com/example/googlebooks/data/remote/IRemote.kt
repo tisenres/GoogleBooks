@@ -5,6 +5,6 @@ import io.reactivex.Single
 import okhttp3.ResponseBody
 
 interface IRemote {
-	fun fetchBooks(query: String): Single<List<Book>>
-    fun fetchImage(url: String): Single<ResponseBody>
+	suspend fun fetchBooks(query: String): List<Book>
+    suspend fun fetchImage(url: String): ResponseBody
 }

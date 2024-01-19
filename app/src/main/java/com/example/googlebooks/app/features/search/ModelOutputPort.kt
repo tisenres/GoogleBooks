@@ -1,6 +1,7 @@
 package com.example.googlebooks.app.features.search
 
 interface ModelOutputPort {
-	fun onBookReceived()
+	fun onBooksReceived()
 	fun onFetchError(message: String)
+	fun onImageReceived()
 }

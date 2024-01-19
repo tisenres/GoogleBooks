@@ -1,21 +1,19 @@
 package com.example.googlebooks.app.features.search
 
-import android.graphics.Bitmap
 import com.example.googlebooks.app.features.search.entity.Book
-import io.reactivex.Observable
-import io.reactivex.Single
-import okhttp3.ResponseBody
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.StateFlow
 
 interface ISearchModel {
-
-	fun getBooks(query: String)
+	fun fetchBooks(query: String)
 	fun getBooksCount(): Int
 	fun getBook(position: Int): Book
 	fun toggleFavoriteStatus(book: Book)
 	fun isBookFavoriteNow(book: Book): Boolean
-	fun getRepositoryChangeSubject(): Observable<Boolean>
+	fun getRepositoryChangeFlow(): SharedFlow<Boolean>
 	fun clearDataSet()
-	fun downloadImage(url: String): Bitmap?
-	fun getImage(url: String): Bitmap?
-
+	suspend fun fetchImageForEachBook()
+	fun getUpdateBooksFlow(): SharedFlow<Boolean>
+	fun getProgressBarStatus(): StateFlow<ProgressBarStatus>
 }

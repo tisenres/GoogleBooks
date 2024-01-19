@@ -10,8 +10,8 @@ import retrofit2.http.Url
 interface GoogleBooksAPI {
 
 	@GET("/books/v1/volumes")
-	fun fetchBooks(@Query("q") query: String): Single<ServerResponse>
+	suspend fun fetchBooks(@Query("q") query: String): ServerResponse
 
 	@GET
-	fun fetchImage(@Url url: String): Single<ResponseBody>
+	suspend fun fetchImage(@Url url: String): ResponseBody
 }

@@ -2,8 +2,7 @@ package com.example.googlebooks.app.features.favorites
 
 import com.example.googlebooks.data.repository.MemoryRepository
 import com.example.googlebooks.app.features.search.entity.Book
-import io.reactivex.Observable
-import io.reactivex.android.schedulers.AndroidSchedulers
+import kotlinx.coroutines.flow.SharedFlow
 
 class FavoritesModel : IFavoritesModel {
 
@@ -15,15 +14,12 @@ class FavoritesModel : IFavoritesModel {
 		return repo.get(position)
 	}
 
-	override fun getRepositoryChangeSubject(): Observable<Boolean> {
-		return repo.behaviorSubject
-			.observeOn(AndroidSchedulers.mainThread())
+	override fun getRepositoryChangeFlow(): SharedFlow<Boolean> {
+		return repo.repoChangedFlow
 	}
 
 	override fun deleteFavoriteBook(book: Book) {
 		repo.delete(book)
 	}
-
-
 }
 

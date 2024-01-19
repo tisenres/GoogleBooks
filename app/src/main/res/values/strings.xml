@@ -4,4 +4,6 @@
     <string name="search">search</string>
     <string name="favorites">favorites</string>
     <string name="fav_sign">⭐</string>
+    <string name="book_preview">book preview</string>
+    <string name="enter_book_title">Enter a book title</string>
 </resources>

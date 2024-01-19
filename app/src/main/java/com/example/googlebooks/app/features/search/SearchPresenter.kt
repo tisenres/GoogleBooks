@@ -1,34 +1,31 @@
 package com.example.googlebooks.app.features.search
 
-import android.graphics.Bitmap
-import android.util.Log
 import com.example.googlebooks.app.features.bookadapter.IAdapterHandler
 import com.example.googlebooks.app.features.search.entity.Book
 import io.reactivex.disposables.Disposable
+import kotlinx.coroutines.CoroutineExceptionHandler
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class SearchPresenter(private var searchView: ISearchView) : ISearchPresenter, ModelOutputPort,
     IAdapterHandler {
 
-    private val searchModel: ISearchModel = SearchModel(this)
+    private val searchModel: ISearchModel = SearchModel()
     private var disposable: Disposable? = null
+    private val handler = CoroutineExceptionHandler { _, exception ->
+		exception.printStackTrace()
+	}
+    private val presenterScope = CoroutineScope(Dispatchers.Main + handler)
 
     override fun onSearchButtonPressed(query: String) {
 
-        searchModel.clearDataSet()
-        searchView.clearBookList()
-
         if (query.isNotBlank()) {
-            searchModel.getBooks(query = query)
-            searchView.startProgressBar()
+            searchModel.clearDataSet()
+            searchModel.fetchBooks(query = query)
         } else {
             searchView.showEmptyQueryMess()
-            searchView.stopProgressBar()
         }
-    }
-
-    override fun getBookImage(url: String): Bitmap? {
-        val bitmap = searchModel.getImage(url)
-        return bitmap
     }
 
     override fun onFavoritesButtonPressed(book: Book) {
@@ -43,15 +40,36 @@ class SearchPresenter(private var searchView: ISearchView) : ISearchPresenter, M
 
     override fun getBooksCount(): Int = searchModel.getBooksCount()
 
-    override fun onBookReceived() {
+    override fun onBooksReceived() {
         searchView.reloadBookList()
         searchView.stopProgressBar()
     }
 
     override fun onViewCreated() {
-        disposable = searchModel.getRepositoryChangeSubject()
-            .subscribe({ searchView.reloadBookList() },
-                { it.message?.let { error -> Log.e("My log", error) } })
+
+        presenterScope.launch {
+            searchModel.getRepositoryChangeFlow()
+                .collect {
+                    searchView.reloadBookList()
+                }
+        }
+
+        presenterScope.launch {
+            searchModel.getUpdateBooksFlow()
+                .collect {
+                    searchView.reloadBookList()
+                }
+        }
+
+        presenterScope.launch {
+            searchModel.getProgressBarStatus()
+                .collect { state ->
+                    when (state) {
+                        ProgressBarStatus.WORK -> searchView.startProgressBar()
+                        ProgressBarStatus.IDLE -> searchView.stopProgressBar()
+                    }
+                }
+        }
     }
 
     override fun onViewDestroy() {
@@ -59,8 +77,10 @@ class SearchPresenter(private var searchView: ISearchView) : ISearchPresenter, M
     }
 
     override fun onFetchError(message: String) {
-        searchView.showErrorMess(message)
+        searchView.showErrorMessage(message)
+    }
+
+    override fun onImageReceived() {
+        searchView.reloadBookList()
     }
 }
-
-

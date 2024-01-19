@@ -1,5 +1,6 @@
 package com.example.googlebooks.app.features.bookadapter
 
+import android.graphics.Bitmap
 import com.example.googlebooks.app.features.search.entity.Book
 
 interface IAdapterHandler {

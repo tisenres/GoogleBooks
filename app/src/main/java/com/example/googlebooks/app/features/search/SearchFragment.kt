@@ -23,7 +23,6 @@ class SearchFragment : Fragment(), ISearchView {
 	override fun onCreateView(
 		inflater: LayoutInflater, container: ViewGroup?,
 		savedInstanceState: Bundle?): View {
-
 		binding = FragmentSearchBinding.inflate(layoutInflater)
 
 		SearchPresenter(this).let {
@@ -42,19 +41,14 @@ class SearchFragment : Fragment(), ISearchView {
 		searchPresenter.onViewCreated()
 	}
 
-	override fun showEmptyQueryMess() {
-		Toast.makeText(this.context, "Enter the search query", Toast.LENGTH_LONG).show()
-	}
-
-
 	private fun setOnClickListeners() {
 		binding.searchView.setOnClickListener {
 			searchPresenter.onSearchButtonPressed(query = getSearchQuery())
 		}
 	}
 
-	override fun clearBookList() {
-		(binding.rvBooks.adapter as BookListAdapter).clearItems()
+	override fun showEmptyQueryMess() {
+		Toast.makeText(this.context, "Enter the search query", Toast.LENGTH_LONG).show()
 	}
 
 	override fun startProgressBar() {
@@ -80,7 +74,7 @@ class SearchFragment : Fragment(), ISearchView {
 		binding.rvBooks.adapter?.notifyDataSetChanged()
 	}
 
-	override fun showErrorMess(error: String) {
+	override fun showErrorMessage(error: String) {
 		Toast.makeText(this.context, error, Toast.LENGTH_LONG).show()
 	}
 }
